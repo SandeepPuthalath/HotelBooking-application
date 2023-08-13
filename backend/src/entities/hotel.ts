@@ -1,7 +1,7 @@
 export default function hotel(
   name: string,
-  type: string,
   address: string,
+  destination: string,
   distance: string,
   desc: string,
   cheapestPrice: number,
@@ -10,10 +10,10 @@ export default function hotel(
 ) {
   return {
     name: (): string => name,
-    type: (): string => type,
     address: (): string => address,
+    destination: (): string => destination,
     distance: (): string => distance,
-    desc: (): string => desc,
+    desc: (): string => desc, 
     cheapestPrice: (): number => cheapestPrice,
     userId: (): string => userId,
     photos: (): string => photos

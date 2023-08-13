@@ -7,6 +7,10 @@ import createBooking from "../../application/user-cases/booking/createBooking";
 import { RoomRepositoryInterface } from "../../application/repositories/roomRepository";
 import { RoomsRepositoryDbInterface } from "../../frameworks/database/mongoDB/repositories/roomsRepositoryDb";
 import getAllUserBookings from "../../application/user-cases/booking/getAllUserBookings";
+import cancdelBooking from "../../application/user-cases/booking/cancelBooking";
+import fetchAllBookingsOfHotel from "../../application/user-cases/booking/fetchAllBookingsOfHotel";
+import getBookingDetails from "../../application/user-cases/booking/getBookingDetails";
+import changeBookingStatus from "../../application/user-cases/booking/changeBookingStatus";
 
 export default function bookingController(
   bookingRepoInt: BookingRepository,
@@ -25,30 +29,88 @@ export default function bookingController(
       res.status(HttpStatus.OK).json({
         status: "success",
         message: "Hotel room has been booked successfully",
+      });
+    }
+  );
+
+  const handleGetAllBookingsOfUser = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { userId } = req.params;
+
+      const data = await getAllUserBookings(userId, bookingRepo);
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        messaage: "All Bookings has been fetched",
         data: data,
       });
     }
   );
 
-  const handleGetAllBookings = expressAsyncHandler(
+  const handleCancelBooking = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
+      const { bookingId } = req.params;
 
-      const { userId } = req.params;
+      const data = await cancdelBooking(bookingId, bookingRepo);
 
-      const data = await getAllUserBookings(userId, bookingRepo);
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        messaage: `${bookingId?.substring(0, 10)} has been cancelled`,
+      });
+    }
+  );
+
+  const handleGettingAllBookingOfHotel = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { hotelId } = req.params;
+
+      const bookings = await fetchAllBookingsOfHotel(hotelId, bookingRepo);
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        messaage: "All bookings has been fetched",
+        bookings: bookings,
+      });
+    }
+  );
+
+  const handleFetchingBookingDetails = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const bookingId = req.query["bookingId"]?.toString();
+
+      const booking = await getBookingDetails(bookingId, bookingRepo);
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "Booking details has been fetched successfully",
+        booking,
+      });
+    }
+  );
+
+  const handleStatsuChange = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+     
+      const bookingId = req.query?.bookingId?.toString();
+      const status = req.query?.status?.toString();
+
+      await changeBookingStatus(bookingId, status, bookingRepo);
 
       res
         .status(HttpStatus.OK)
         .json({
           status: "success",
-          messaage: "All Bookings has been fetched",
-          data: data,
+          message: "Successfully updated booking status",
         });
     }
   );
 
   return {
     handleBooking,
-    handleGetAllBookings,
+    handleGetAllBookingsOfUser,
+    handleCancelBooking,
+    handleGettingAllBookingOfHotel,
+    handleFetchingBookingDetails,
+    handleStatsuChange,
   };
 }

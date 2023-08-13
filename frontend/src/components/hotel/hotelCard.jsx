@@ -13,8 +13,8 @@ import { MdLocationPin } from "react-icons/md";
 export default function HotelCard({
   _id,
   name,
-  type,
   address,
+  destination,
   distance,
   desc,
   ratting,
@@ -40,17 +40,14 @@ export default function HotelCard({
         </Typography>
         <div className="flex justify-between items-center">
           <Rating value={ratting} readonly />
-          <Typography className="capitalize" variant="samll" color="blue-gray">
-            {type}
-          </Typography>
         </div>
         <div className="flex justify-start items-center">
           <MdLocationPin color="red" />
           <Typography className="capitalize" variant="samll" color="blue-gray">
-            {address.split(",")[0]}
+            {destination}
           </Typography>
         </div>
-        <Typography variant="lead" color="gray" className="mt-3 font-normal">
+        <Typography variant="small" color="gray" className="mt-3 font-normal">
           {desc.substring(0, 50)}...
         </Typography>
       </CardBody>

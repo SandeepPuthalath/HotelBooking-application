@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   Carousel,
   Dialog,
@@ -19,6 +20,9 @@ import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { handleBookingRoom } from "../../redux/reducers/booking/bookingSlice";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import Loading from "../auth/Loading";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -54,46 +58,84 @@ const initialValues = {
   email: "",
   address: "",
   maxPeople: "",
-  checkInDate: "",
+  checkInDate: ``,
   checkOutDate: "",
 };
 
 const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const loading = useSelector(s => s.bookings.loading)
+  const message = useSelector(s => s.bookings?.message)
   const applicantId = useSelector((state) => state?.user?.data?.applicantId);
+  const access = useSelector(s => s.user?.data?.token)
+  const [price, setPrice] = React.useState(roomInfo?.price)
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (value) => {
+      if(!access){
+        return navigate('/login');
+      }
       value.roomId = roomInfo?._id;
       value.hotelId = roomInfo?.hoteId;
+      value.price = price;
       value.userId = applicantId;
       dispatch(handleBookingRoom(value))
         .then((response) => {
           console.log("success", response);
           formik.isSubmitting = false
-          toast.success(response?.payload?.message);
+          Swal.fire(
+            'Good job!',
+           `${message}`,
+            'success'
+          )
+          formik.resetForm()
           setOpen(false)
         })
         .catch((error) => {
           console.log("error")
           console.log(error);
-          toast.error(error?.message)
+          Swal.fire(
+            'Error!',
+           `${message}`,
+            'error'
+          )
         });
     },
   });
 
+
+  React.useEffect(() => {
+    handlePriceChange()
+
+  }, [formik.values.checkInDate, formik.values.checkOutDate])
+
+
+  const handlePriceChange = () => {
+
+    if(formik.values.checkInDate && formik.values.checkOutDate){
+      console.log("got here")
+      const diff = new Date(formik.values.checkOutDate) - new Date(formik.values.checkInDate)
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+      const total = roomInfo?.price * days
+      setPrice(total)
+    }
+  }
+
+
   return (
-    <Dialog size="xl" open={open} handler={() => setOpen(false)}>
-      <div className="flex flex-col justify-center items-center m-5">
+    <Dialog className="overflow-y-auto" size="xxl" open={open} handler={() => setOpen(false)}>
+      <div className="flex flex-col justify-center items-center m-10">
         <div className="">
           <Typography variant="h4">Booking</Typography>
         </div>
         <div className="w-full md:grid grid-cols-2 gap-2">
           <div className="md:col-span-1 grid justify-center items-center">
-            <Card className="max-w-[24rem] overflow-hidden shadow-none">
-              <CardHeader floated={false}>
-                <Carousel className="rounded-xl">
+            <Card className="max-w-[24rem] overflow-hidden  shadow-none">
+              <CardHeader shadow={false} floated={false}>
+                <Carousel>
                   {photos.map((photo) => {
                     return (
                       <img
@@ -112,6 +154,12 @@ const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
                 </div>
                 <Typography>{roomInfo?.desc.substring(0, 100)}</Typography>
               </CardBody>
+              <CardFooter>
+                <div className="flex border-gray-500 justify-between border-t-2 pt-2">
+                  <p className="text-2xl font-semibold">Total Price</p>
+                  <p className="text-xl font-semibold">₹ {price}</p>
+                </div>
+              </CardFooter>
             </Card>
           </div>
           <div className="md:col-span-1 pt-10">
@@ -186,9 +234,10 @@ const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
                   ))}
                 </Select>
               </div>
-              <div className="w-72 flex flex-row justify-between gap-2">
+              <div className="w-72 flex flex-col justify-between gap-2">
                 <div className="w-20">
                   <Input
+                    onChange={formik.handleChange}
                     size="md"
                     type="date"
                     {...formik.getFieldProps("checkInDate")}
@@ -212,7 +261,7 @@ const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
                       formik.touched.checkOutDate &&
                       Boolean(formik.errors.checkOutDate)
                     }
-                    min={today}
+                    min={formik.values.checkInDate}
                     label={
                       formik.touched.checkOutDate && formik.errors.checkOutDate
                         ? formik.errors.checkOutDate
@@ -225,14 +274,15 @@ const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
           </div>
         </div>
       </div>
-      <DialogFooter className="flex justify-center items-center my-10">
+      <DialogFooter className="flex justify-center items-center my-10 gap-2">
+      <Button disabled={loading} onClick={() => setOpen(false)} variant="text" className="bg-red-100 text-red-800 rounded-sm">Cancel</Button>
         <Button
-          size="lg"
+          size="md"
           onClick={formik.handleSubmit}
           disabled={formik.isSubmitting}
-          className="!border rounded-md bg-gray-900 text-gray-200 shadow-none"
+          className="!border rounded-sm bg-gray-900 text-gray-200 shadow-none"
         >
-          {formik.isSubmitting ? "loading...." : "Book Now"}
+          {loading? "loading...." : "Book Now"}
         </Button>
       </DialogFooter>
     </Dialog>

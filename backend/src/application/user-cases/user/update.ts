@@ -5,7 +5,7 @@ import { UserDbInterface } from "../../repositories/userDbRepository";
 import { removePasswordField } from "./read";
 
 export const updateUserProfile = async (
-  id: ObjectId,
+  id: string,
   updates: {
     firstName: string;
     lastName: string;
@@ -33,7 +33,7 @@ export const updateUserProfile = async (
 };
 
 export const changeUserRole = async (
-  id: ObjectId,
+  id: string,
   userRepository: ReturnType<UserDbInterface>
 ) => {
   if (!id) {
@@ -56,3 +56,4 @@ export const changeUserRole = async (
 
   return user;
 };
+

@@ -21,6 +21,7 @@ const expressConfig = (app: Application) => {
 
   const corsOptions = {
     origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
     exposedHeaders: [
       'Cross-Origin-Opener-Policy',
       'Cross-Origin-Resource-Policy',

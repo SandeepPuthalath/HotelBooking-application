@@ -3,6 +3,7 @@ import createBookingEntity from "../../../entities/booking";
 import AppError from "../../../utils/appError";
 import { HttpStatus } from "../../../types/httpStatus";
 import { RoomsRepositoryDbInterface } from "../../../frameworks/database/mongoDB/repositories/roomsRepositoryDb";
+import mongoose from "mongoose";
 
 export const createDateArray = (startDate: string, endDate:string) => {
 
@@ -28,6 +29,7 @@ interface BookingInterface {
   maxPeople: number;
   checkInDate: string;
   checkOutDate: string;
+  price: number
 }
 
 export default async function booking(
@@ -46,6 +48,7 @@ export default async function booking(
     maxPeople,
     checkInDate,
     checkOutDate,
+    price
   } = bookingDetails;
 
   if (
@@ -58,7 +61,8 @@ export default async function booking(
     !userId ||
     !maxPeople ||
     !checkInDate ||
-    !checkOutDate
+    !checkOutDate ||
+    !price
   ) {
     
     throw new AppError("Bad Request", HttpStatus.BAD_REQUEST);
@@ -70,12 +74,13 @@ export default async function booking(
     phoneNumber,
     email,
     address,
-    roomId,
-    hotelId,
-    userId,
+    new mongoose.Types.ObjectId(roomId),
+    new mongoose.Types.ObjectId(hotelId),
+    new mongoose.Types.ObjectId(userId),
     maxPeople,
     checkInDate,
     checkOutDate,
+    price
   );
 
 

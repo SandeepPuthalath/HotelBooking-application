@@ -18,7 +18,11 @@ export default function bookingRepository(
   const updateBooking = async (bookingId: string, updates: any) =>
     await repository.updateBooking(bookingId, updates);
 
-  const getAllBookingsOfUser = async (userId:string) => await repository.getAllBookingsOfUser(userId)
+  const getAllBookingsOfUser = async (userId:string) => await repository.getAllBookingsOfUser(userId);
+
+  const getAllBookingOfHotel =async (hotelId:string) => await repository.getAllBookingOfHotel(hotelId);
+
+  const changeStatus = async (bookingId: string, status: string) => await repository.changeStatus(bookingId, status);
 
   return {
     createBooking,
@@ -27,6 +31,8 @@ export default function bookingRepository(
     deleteBooking,
     updateBooking,
     getAllBookingsOfUser,
+    getAllBookingOfHotel,
+    changeStatus,
   };
 }
 

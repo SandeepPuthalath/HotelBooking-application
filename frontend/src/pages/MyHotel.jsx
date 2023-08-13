@@ -19,6 +19,7 @@ import { Rating } from "@material-tailwind/react";
 import UserRooms from "../components/room/UserRooms";
 import { Outlet } from "react-router-dom";
 import ErrorBoundary from "../util/ErrorBundary";
+import Loading from "../components/auth/Loading";
 
 const cloudName = "da88acifi";
 const uploadPreset = "BookIt_uploades";
@@ -35,8 +36,8 @@ export const separatePhotoId = (url) => {
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Hotel Name is required"),
-  type: Yup.string().required("Type is required"),
   address: Yup.string().required("Address is required"),
+  destination: Yup.string().required("Destination is required"),
   distance: Yup.string().required("Distance is required"),
   desc: Yup.string().required("Description is required"),
   cheapestPrice: Yup.number().required("Cheapest Price is required"),
@@ -48,6 +49,7 @@ const MyHotel = () => {
   const error = useSelector((s) => s.myHotel?.error);
   const myHotelData = useSelector((s) => s.myHotel?.data);
   const applicantId = useSelector((s) => s.user?.data?.applicantId);
+  const destinaitons = useSelector(s => s.allDestinations?.data)
   const dispatch = useDispatch();
 
   const [imageUrl, setImageUrl] = useState("");
@@ -55,7 +57,7 @@ const MyHotel = () => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-      dispatch(fetchMyHotelDetails(applicantId));
+    dispatch(fetchMyHotelDetails(applicantId));
   }, [dispatch]);
 
   const handleIconClick = () => {
@@ -99,12 +101,8 @@ const MyHotel = () => {
       });
   };
 
-  if (loading) {
-    return <h1>Loading.....</h1>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
+  if(loading){
+    return <Loading/>
   }
 
   return (
@@ -151,8 +149,8 @@ const MyHotel = () => {
                     <Formik
                       initialValues={{
                         name: "",
-                        type: "",
                         address: "",
+                        destination: "",
                         distance: "",
                         desc: "",
                         cheapestPrice: "",
@@ -181,16 +179,21 @@ const MyHotel = () => {
                           </Field>
                         </div>
                         <div className="m-3">
-                          <Field name="type">
+                          <Field name="destination">
                             {({ field }) => (
                               <>
-                                <Input
-                                  variant="standard"
-                                  label="Type"
+                                <label htmlFor="type">Destination</label>
+                                <select
                                   {...field}
-                                />
+                                  id="destination"
+                                  className="w-full p-2 border"
+                                >
+                                  <option value="">Select a type</option>
+                                  {destinaitons.map(destination => <option key={destination?._id} value={destination?.name}>{destination?.name}</option>)}
+                                  {/* Add more options as needed */}
+                                </select>
                                 <ErrorMessage
-                                  name="type"
+                                  name="destination"
                                   component="div"
                                   className="text-red-500"
                                 />
@@ -198,6 +201,7 @@ const MyHotel = () => {
                             )}
                           </Field>
                         </div>
+
                         <div className="m-3">
                           <Field name="address">
                             {({ field }) => (
@@ -335,7 +339,9 @@ const MyHotel = () => {
                 </div>
               </div>
               <div className="flex w-1/2">
-                <Typography variant="paragraph">{myHotelData?.desc.substring(0, 150)}</Typography>
+                <Typography variant="paragraph">
+                  {myHotelData?.desc.substring(0, 150)}
+                </Typography>
               </div>
             </figcaption>
           </figure>

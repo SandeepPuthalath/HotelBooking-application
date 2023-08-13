@@ -18,7 +18,7 @@ export  function removePasswordField(object: any){
 }
 
 
-export const getUserProfile = async ( id: ObjectId, userRepository : ReturnType<UserDbInterface>) =>{
+export const getUserProfile = async ( id: string, userRepository : ReturnType<UserDbInterface>) =>{
 
 
     if(!id){

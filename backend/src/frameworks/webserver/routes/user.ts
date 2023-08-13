@@ -16,7 +16,7 @@ const userRouter = () =>{
 
     router.get('/profile/:userId', controller.handleGetUserProfile);
     router.put('/profile/update/:userId', controller.handleUpdateUserProfile);
-    router.patch('/profile/changeRole/:userId', controller.HandleChangeUserRole);
+    // router.patch('/profile/changeRole/:userId', controller.HandleChangeUserRole);
    
 
     return router

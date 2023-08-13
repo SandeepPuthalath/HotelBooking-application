@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsersData } from "../redux/reducers/UsersView/usersViewSlice";
 import { useNavigate } from "react-router-dom";
+import { cloudName } from "../config";
 
 const TABS = [
   {
@@ -79,29 +80,11 @@ export default function AdminUsersView() {
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Members list
+              User list
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              See information about all members
+              See information about all Users
             </Typography>
-          </div>
-        </div>
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs value="all" className="w-full md:w-max">
-            <TabsHeader>
-              {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value}>
-                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                </Tab>
-              ))}
-            </TabsHeader>
-          </Tabs>
-          <div className="w-full md:w-72">
-            <Input
-              label="Search"
-              onChange={handleSearch}
-              icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-            />
           </div>
         </div>
       </CardHeader>
@@ -109,7 +92,7 @@ export default function AdminUsersView() {
         <table className="mt-4 w-full min-w-max table-auto text-left">
           <thead>
             <tr>
-              {TABLE_HEAD.map((head) => (
+              {TABLE_HEAD.map((head) =>(
                 <th
                   key={head}
                   className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
@@ -153,7 +136,7 @@ export default function AdminUsersView() {
                       <div className="flex items-center gap-3">
                         <Avatar
                           src={
-                            photo ? photo : "/defaults/default-person-80.png"
+                            photo ? `https://res.cloudinary.com/${cloudName}/image/upload/v1689876154/BookIt_uploades/${photo[0]}.jpg` : "/defaults/default-person-80.png"
                           }
                           alt={firstName + " " + lastName}
                           size="sm"

@@ -28,7 +28,6 @@ export default function AccountMenu({role}) {
       </MenuHandler>
       <MenuList>
         <MenuItem onClick={() => navigate('profile')}>Profile</MenuItem>
-        {role === "business" && <MenuItem onClick={() => navigate('myhotel')}>My hotels</MenuItem>}
         <MenuItem onClick={handleLogOut}>Log out</MenuItem>
       </MenuList>
     </Menu>

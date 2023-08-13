@@ -4,7 +4,17 @@ import { useSelector } from "react-redux";
 import AdminLoginPage from "../../pages/AdminLoginPage";
 import AdminDashboard from "../../pages/AdminDashboard";
 import AdminLayout from "../../components/admin/AdminLayout";
-const AdminUserView = lazy(() => import("../../components/admin/userManagement/AdminUserView"))
+const AddBanner = lazy(() => import("../../components/admin/banner/AddBanner"))
+const BannerList = lazy(() => import("../../components/admin/banner/BannerList"))
+const AdminBannerManagement = lazy(() =>
+  import("../../pages/auth/AdminBannerManagement")
+);
+const AdminDestinationPage = lazy(() =>
+  import("../../pages/AdminDestinationPage")
+);
+const AdminUserView = lazy(() =>
+  import("../../components/admin/userManagement/AdminUserView")
+);
 const AdminUsersView = lazy(() => import("../../pages/AdminUsersView"));
 const AdminApplications = lazy(() => import("../../pages/AdminApplications"));
 
@@ -50,14 +60,61 @@ const AdminRouter = () => {
               </Suspense>
             }
           />
-           <Route
+          <Route
             path="user/:userId"
             element={
               <Suspense>
-                <AdminUserView/>
+                <AdminUserView />
               </Suspense>
             }
           />
+          <Route
+            path="destination"
+            element={
+              token?.access ? (
+                <Suspense>
+                  <AdminDestinationPage />
+                </Suspense>
+              ) : (
+                <Navigate to="/admin/login" />
+              )
+            }
+          />
+          <Route
+            path="banners"
+            element={
+              token?.access ? (
+                <Suspense>
+                  <AdminBannerManagement />
+                </Suspense>
+              ) : (
+                <Navigate to="/admin/login" />
+              )
+            }
+          >
+            <Route
+              index={true}
+              element={
+                token?.access ? (
+                  <Suspense>
+                  <BannerList/>
+                </Suspense>
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
+              }
+            />
+            <Route
+              path="add-banner"
+              element={
+                token?.access ? (
+                  <AddBanner/>
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
+              }
+            />
+          </Route>
           <Route path="*" element={<h1>404 page not found</h1>} />
         </Route>
       </Routes>

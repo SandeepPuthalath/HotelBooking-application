@@ -10,6 +10,7 @@ import removeHotel from "../../application/user-cases/hotel/remove";
 import { HttpStatus } from "../../types/httpStatus";
 import mongoose from "mongoose";
 import getUserHotel from "../../application/user-cases/hotel/getUserHotel";
+import viewByDestination from "../../application/user-cases/hotel/viewByDestination";
 
 export default function hotelController(
   hotelRepositoryDb: hotelRepositoryInterface,
@@ -91,17 +92,30 @@ export default function hotelController(
 
   const handleGetMyHotelDetails = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-      console.log(req.params);
+     
       const userId = req.params?.userId;
       const data = await getUserHotel(
         new mongoose.Types.ObjectId(userId),
         repository
-      );
-      console.log(data);
+      )
 
       res.status(HttpStatus.OK).json({
         status: "success",
         message: "User hotel has been fetched successfully",
+        data: data,
+      });
+    }
+  );
+
+  const handleDestinationSearch = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const destination = req.params?.destination;
+
+      const data = await viewByDestination(destination, repository);
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "search result has been fetched",
         data: data,
       });
     }
@@ -114,5 +128,6 @@ export default function hotelController(
     handleViewHotel,
     handleViewAllHotels,
     handleGetMyHotelDetails,
+    handleDestinationSearch,
   };
 }

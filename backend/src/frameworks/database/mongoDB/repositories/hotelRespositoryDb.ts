@@ -7,8 +7,8 @@ export default function hotelRepositoryDb() {
   const create = async (hotelEntity: HotelEntityInterface) => {
     const newHotel = new Hotel({
       name: hotelEntity.name(),
-      type: hotelEntity.type(),
       address: hotelEntity.address(),
+      destination: hotelEntity.destination(),
       distance: hotelEntity.distance(),
       desc: hotelEntity.desc(),
       cheapestPrice: hotelEntity.cheapestPrice(),
@@ -35,6 +35,9 @@ export default function hotelRepositoryDb() {
     
   const userHotel = async (userId: mongoose.Types.ObjectId) => await Hotel.findOne({userId});
 
+  const findByDestination = async (destination: string) => await Hotel.find({destination});
+
+
 
   return {
     create,
@@ -42,7 +45,8 @@ export default function hotelRepositoryDb() {
     remove,
     view,
     viewAll,
-    userHotel
+    userHotel,
+    findByDestination
   };
 }
 

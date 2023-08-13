@@ -1,40 +1,43 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { handleGetUsersAllBookings, resetState } from '../redux/reducers/booking/bookingSlice'
-import { Typography } from '@material-tailwind/react'
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  handleGetUsersAllBookings,
+  resetState,
+} from "../redux/reducers/booking/bookingSlice";
+import Loading from "../components/auth/Loading";
+import BookingCard from "../components/booking/BookingCard";
 
 const BookingsPage = () => {
-  const dispatch = useDispatch()
-  const loading = useSelector(s => s.bookings?.loading);
-  const data = useSelector(s => s.bookings?.data);
-  const error = useSelector(s => s.bookings?.error)
+  const dispatch = useDispatch();
+  const loading = useSelector((s) => s.bookings?.loading);
+  const bookings = useSelector((s) => s.bookings?.bookings);
+  const error = useSelector((s) => s.bookings?.error);
   const applicantId = useSelector((state) => state?.user?.data?.applicantId);
-  
-  React.useEffect(() =>{
-    dispatch(resetState())
-    dispatch(handleGetUsersAllBookings(applicantId))
-  },[])
 
-  if(loading){
-    return (
-      <div className='h-screen w-screen flex justify-center items-center'>
-        <Typography variant="h3">Loading......</Typography>
-      </div>
-    )
-  }
+  React.useEffect(() => {
+    dispatch(handleGetUsersAllBookings(applicantId));
+  }, []);
 
-
-  if(error){
-    <div className='h-screen w-screen flex justify-center items-center'>
-        <Typography variant="h3">Somthing Went wrong</Typography>
-      </div>
+  if (loading) {
+    return <Loading />;
   }
 
   return (
-    <div>
-      <h1>booking page</h1>
-    </div>
-  )
-}
+    <>
+      <div className="m-10 bg-gray-100 shadow-lg p-10 rounded-md">
+        <div className="flex justify-center">
+          <h1 className="text-2xl font-semibold uppercase">Bookings</h1>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 grid-flow-row gap-5 m-10">
+        {!bookings
+          ? "No Booking to show"
+          : bookings?.map((booking) => (
+              <BookingCard key={booking?._id} {...booking} />
+            ))}
+      </div>
+    </>
+  );
+};
 
-export default BookingsPage
+export default BookingsPage;

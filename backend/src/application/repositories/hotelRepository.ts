@@ -19,6 +19,8 @@ export default function hotelRepository(
 
   const userHotel =async (userId:mongoose.Types.ObjectId) => await repository.userHotel(userId)
 
+  const findByDestination =async (destination:string) => await repository.findByDestination(destination) 
+
 
   return {
     create,
@@ -27,6 +29,7 @@ export default function hotelRepository(
     view,
     viewAll,
     userHotel,
+    findByDestination
   };
 }
 

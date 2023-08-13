@@ -1,9 +1,21 @@
-import { createApplicationInterface } from "../../types/applicationInterface";
+import { ApplicationEntityInterface } from "../../entities/application";
+import { ApplicationRepositoryDbInterface } from "../../frameworks/database/mongoDB/repositories/applicationRespositoryDb";
 
-export default function applicationRepository (repository: any){
-    const create = async (application: createApplicationInterface) => await repository.create(application)
+export default function applicationRepository (repository:ReturnType<ApplicationRepositoryDbInterface>){
+
+    const create = async (application: ReturnType<ApplicationEntityInterface>) => await repository.create(application);
+
+    const fetchAll = async () => await repository.fetchAll();
+
+    const fetchApplication = async (applicationId: string) => await repository.fetchApplication(applicationId);
+
+    const changeStatus = async (applicationId: string) => await repository.changeStatus(applicationId);
+
     return {
-        create
+        create,
+        fetchAll,
+        fetchApplication,
+        changeStatus,
     }
 }
 

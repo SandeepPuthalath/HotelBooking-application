@@ -1,5 +1,5 @@
 import { ObjectId } from "mongoose";
-import { GoogleUserInteface } from "../../../../types/googleUserInterface";
+// import { GoogleUserInteface } from "../../../../types/googleUserInterface";
 import { CreateUserInterface } from "../../../../types/userInterface";
 import User from "../models/userModel";
 import { UserEntityType } from "../../../../entities/user";
@@ -34,14 +34,21 @@ export const userRepositoryMongoDB = () => {
     return user;
   };
 
-  const getUserById = async (id: ObjectId) => await User.findById(id);
+  const getUserById = async (id: string) => await User.findById(id);
 
-  const updateUserByProperty = async (id: ObjectId, updates:any) =>{
+  const updateUserByProperty = async (id: string, updates:any) =>{
     const user: CreateUserInterface | null= await User.findByIdAndUpdate(id, updates, {new: true})
     return user
   }
 
   const getAllUsers = async () => await User.find();
+
+  const changeUserRole = async (id:string, GSTNumber: string) => {
+
+     const data = await User.findByIdAndUpdate(id, {$set:{role:"business", GSTNumber: GSTNumber}},{new: true});
+
+     return data;
+  }
 
   return {
     getUserByEmail,
@@ -49,7 +56,9 @@ export const userRepositoryMongoDB = () => {
     getUserByPhoneNumber,
     getUserById,
     updateUserByProperty,
-    getAllUsers
+    getAllUsers,
+    changeUserRole
+    
   };
 };
 

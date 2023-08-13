@@ -1,67 +1,48 @@
-import { useDispatch } from "react-redux";
-import HotelCard from "../components/hotel/hotelCard";
+import React from "react"
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { viewAllHotels } from "../redux/reducers/hotel/hotelThunk";
 import { Link } from "react-router-dom";
 import HotelGridSkeleton from "../components/Shimmers/HotelGridSkeleton";
 import {
   Button,
-  Input,
+  Option,
+  Select,
   Typography,
 } from "@material-tailwind/react";
+import { handleDestinationSearch } from "../redux/reducers/hotel/hotelSlice";
 
-const FilterHotels = (search, hotels) => {
-  const filteredData = hotels.filter((hotel) =>
-    hotel?.address.toLowerCase().includes(search.toLowerCase())
-  );
-
-  return filteredData;
-};
+const HotelCard = React.lazy(() => import( "../components/hotel/hotelCard"))  
 
 export default function Hotels() {
-  const [isLoading, setIsLoading] = useState(true);
+  const loading = useSelector(s => s.hotels?.loading)
+  const hotels = useSelector(s => s.hotels?.data)
   const dispatch = useDispatch();
-  const [hotels, setHotels] = useState([]);
-  const [search, setSearch] = useState("");
-  const [filteredHotels, setFilteredHotels] = useState([]);
+  const [destination, setDestination] = useState("");
+  const destinations = useSelector(s => s.allDestinations?.data)
+
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000); // 10 seconds
-
-    const fetchAllHotels = async () => {
-      try {
-        const { payload } = await dispatch(viewAllHotels());
-
-        setHotels(payload?.data?.data);
-        setFilteredHotels(payload?.data?.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchAllHotels();
-
-    return () => clearTimeout(timer);
+    dispatch(viewAllHotels());
   }, []);
 
   const handleSetSearchValue = (e) => {
-    setSearch(e.target.value);
+    setDestination(e);
   };
 
   const handleSearch = () => {
-    const data = FilterHotels(search, hotels);
-    setFilteredHotels(data);
+    dispatch(handleDestinationSearch(destination))
   };
 
-  if (isLoading) return <HotelGridSkeleton />;
+  if (loading) return <HotelGridSkeleton />;
 
   return (
     <>
       <div className="flex bg-gray-900 p-8 gap-2">
         <div className="w-72">
-          <Input onChange={handleSetSearchValue} label="Search Destination"/>
+          <Select onChange={handleSetSearchValue} label="Select a destination" name="destination">
+           { destinations.map(destination => <Option key={destination?.key} value={destination?.name}>{destination?.name}</Option>)}
+          </Select>
         </div>
         <div>
           <Button onClick={handleSearch} className="shadow-none bg-gray-300 text-gray-700">Search</Button>
@@ -73,8 +54,8 @@ export default function Hotels() {
         </Typography>
       </div>
       <div className="grid md:grid-cols-3 gap-8 items-center justify-center p-20">
-        {filteredHotels.map((hotel) => (
-          <Link to={"/hotel/" + hotel._id} key={hotel._id}>
+        {hotels.map((hotel) => (
+          <Link to={"/hotel/" + hotel._id} key={hotel?._id}>
             <HotelCard {...hotel} />
           </Link>
         ))}

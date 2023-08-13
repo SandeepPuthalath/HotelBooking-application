@@ -12,6 +12,7 @@ import { IoAdd } from "react-icons/io5";
 
 const ProfilePage = () => {
   const state = useSelector((state) => state);
+  const name = state.userProfile?.data?.firstName
   const applicantId = state?.user?.data?.applicantId;
   const [avatar, setAvatar] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -206,7 +207,7 @@ const ProfilePage = () => {
           </button>
         </form>
       </section>
-      <GSTDialog isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <GSTDialog isOpen={isOpen} onClose={() => setIsOpen(false)} name={name} applicantId={applicantId}/>
     </div>
   );
 };

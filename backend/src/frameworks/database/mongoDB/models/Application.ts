@@ -1,25 +1,29 @@
-import mongoose, { Schema, model } from 'mongoose';
-
+import mongoose, { Schema, model } from "mongoose";
 
 const applicationSchema = new Schema(
   {
+    status: {
+      type: String,
+      trim: true,
+      default: "pending",
+    },
     applicantId: {
-        type: mongoose.Types.ObjectId,
-        trim: true,
-        require: true
+      type: String,
+      trim: true,
+      require: true,
     },
     name: {
       type: String,
-      trim: true
+      trim: true,
     },
     GSTNumber: {
-        type: String,
-        trim: true,
-        require: true
-    }
+      type: String,
+      trim: true,
+      require: true,
+    },
   },
   { timestamps: true }
 );
 
-const Application = model('application', applicationSchema);
+const Application = model("application", applicationSchema);
 export default Application;

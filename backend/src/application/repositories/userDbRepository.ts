@@ -15,11 +15,13 @@ export const userDbRepository = (
 
   const getUserByPhoneNumber = async (phoneNumber: number) =>  await repository.getUserByPhoneNumber(phoneNumber);
 
-  const getUserById = async (id: ObjectId) => await repository.getUserById(id)
+  const getUserById = async (id: string) => await repository.getUserById(id)
 
-  const updateUserByProperty =async (id:ObjectId, update: object) => await repository.updateUserByProperty(id, update)
+  const updateUserByProperty =async (id:string, update: object) => await repository.updateUserByProperty(id, update)
 
-  const getAllUsers = async () => repository.getAllUsers()
+  const getAllUsers = async () => repository.getAllUsers();
+
+  const changeUserRole = async (id: string, GSTNumber: string) => await repository.changeUserRole(id, GSTNumber);
 
   return {
     getUserByEmail,
@@ -27,7 +29,8 @@ export const userDbRepository = (
     getUserByPhoneNumber,
     getUserById,
     updateUserByProperty,
-    getAllUsers
+    getAllUsers,
+    changeUserRole
   };
 };
 

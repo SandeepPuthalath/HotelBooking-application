@@ -20,15 +20,29 @@ export const handleGetUsersAllBookings = createAsyncThunk("booking/all", async (
         const response = await bookingApi.get(`/${payload}`);
 
         return response.data
+
     } catch (error) {
         console.log(error)
         throw new Error(error)
     }
 })
 
+export const handleCancelBooking = createAsyncThunk("booking/cancel", async (payload) => {
+    try {
+        const response = await bookingApi.patch(`/${payload}`);
+
+        return response.data
+
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
 const initialState = {
     loading: false,
-    data: null,
+    bookings: [],
+    booking: null,
+    message: "",
     error: null
 }
 
@@ -39,7 +53,9 @@ const bookingSlice = createSlice({
     reducers: {
         resetState: (state) => {
             state.loading = false
-            state.data = null
+            state.bookings = []
+            state.booking = null
+            state.message = ""
             state.error = null
         }
     },
@@ -51,7 +67,8 @@ const bookingSlice = createSlice({
             })
             .addCase(handleBookingRoom.fulfilled, (state, action) => {
                 state.loading = false
-                state.data = action.payload
+                state.booking = action.payload?.data
+                state.message = action.payload?.message
             })
             .addCase(handleBookingRoom.rejected, (state, action) => {
                 state.loading = false
@@ -63,9 +80,21 @@ const bookingSlice = createSlice({
             })
             .addCase(handleGetUsersAllBookings.fulfilled, (state, action) => {
                 state.loading = false
-                state.data = action.payload?.data
+                state.bookings = action.payload?.data
             })
             .addCase(handleGetUsersAllBookings.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message;
+            })
+            .addCase(handleCancelBooking.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(handleCancelBooking.fulfilled, (state, action) => {
+                state.loading = false
+                state.message = action.payload?.message
+            })
+            .addCase(handleCancelBooking.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message;
             })

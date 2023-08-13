@@ -10,6 +10,12 @@ import roomsSlice from "../reducers/room/roomsSlice";
 import roomDetailsSlice from "../reducers/room/roomDetailsSlice";
 import userSignupSlice from "../reducers/auth/user/userSignupSlice";
 import bookingSlice from "../reducers/booking/bookingSlice";
+import imageUploadSlice from "../reducers/imageUpload/imageUploadSlice";
+import destinationSlice from "../reducers/admin/destination/destinationSlice";
+import destinationsSlice from "../reducers/admin/destination/destinationsSlice";
+import applicationReducer from "../reducers/applications/applicationReducer";
+import destinationReducer from "../reducers/destination/destinationReducer";
+import ownerBookingReducer from "../reducers/owner/ownerBookingReducer";
 
 
 const loadState = () => {
@@ -48,7 +54,13 @@ const store = configureStore({
         myHotel: myHotelSlice,
         rooms: roomsSlice,
         roomDetails: roomDetailsSlice,
-        bookings:bookingSlice
+        bookings:bookingSlice,
+        uploadImg:imageUploadSlice,
+        destination: destinationSlice,
+        allDestinations:destinationsSlice,
+        application:applicationReducer,
+        destinations:destinationReducer,
+        ownerBooking: ownerBookingReducer,
         
     },
     preloadedState:persistedState

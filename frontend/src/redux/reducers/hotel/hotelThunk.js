@@ -3,7 +3,7 @@ import hotelAxios from "../../api/hotelApi";
 
 export const viewAllHotels = createAsyncThunk("viewAllHotels", async () => {
   const response = await hotelAxios.get('/');
-  return response;
+  return response.data;
 });
 
 

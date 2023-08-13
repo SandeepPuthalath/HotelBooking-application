@@ -7,11 +7,11 @@ const hotelSchema = new Schema(
         type: String,
         require: true,
     },
-    type: {
+    address:{
         type: String,
         require: true
     },
-    address:{
+    destination: {
         type: String,
         require: true
     },
@@ -53,4 +53,5 @@ const hotelSchema = new Schema(
 );
 
 const Hotel = model('Hotel', hotelSchema);
+
 export default Hotel;

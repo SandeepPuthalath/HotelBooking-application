@@ -23,19 +23,22 @@ const bookingSchema = new mongoose.Schema(
       require: true,
     },
     roomId: {
-      type: String,
+      type: mongoose.Types.ObjectId,
       trim: true,
       require: true,
+      ref: "rooms"
     },
     hotelId: {
-      type: String,
+      type: mongoose.Types.ObjectId,
       trim: true,
       require: true,
+      ref:"hotels"
     },
     userId:{
-      type: String,
+      type: mongoose.Types.ObjectId,
       trim: true,
       require: true,
+      ref: "users"
     },
     maxPeople: {
       type: Number,
@@ -52,6 +55,16 @@ const bookingSchema = new mongoose.Schema(
       trim: true,
       require: true,
     },
+    price:{
+      type: Number,
+      trim: true,
+      require: true
+    },
+    status:{
+      type:String,
+      trim: true,
+      default: "booked"
+    }
   },
   { timestamps: true }
 );

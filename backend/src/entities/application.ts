@@ -3,10 +3,10 @@ export default function application(
 ){
 
     return {
-        getApplicantId: () => applicantId,
-        getName: () => name,
-        getGSTNumber: () => GSTNumber
+        getApplicantId: (): string => applicantId,
+        getName: () : string => name,
+        getGSTNumber: () : string => GSTNumber
     }
 }
 
-export type applicationEntityInterface = typeof application
+export type ApplicationEntityInterface = typeof application

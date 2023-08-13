@@ -1,24 +1,33 @@
-import { applicationEntityInterface } from "../../../../entities/application";
+import { ApplicableRefactorInfo } from "typescript";
+import { ApplicationEntityInterface } from "../../../../entities/application";
 import { createApplicationInterface } from "../../../../types/applicationInterface";
 import Application from "../models/Application";
 
+export default function applicationRepositoryDb() {
+  const create = async (
+    applicationEntity: ReturnType<ApplicationEntityInterface>
+  ) => {
+    const newApplication = new Application({
+      name: applicationEntity.getName(),
+      applicantId: applicationEntity.getApplicantId(),
+      GSTNumber: applicationEntity.getGSTNumber(),
+    });
 
+    return newApplication.save();
+  };
 
-export default function applicationRepositoryDb(){
+  const fetchAll = async () => await Application.find({});
 
-    const create = async (applicationEntity:any) => {
-        const newApplication = new Application({
-            applicantId: applicationEntity.getApplicantId(),
-            GSTNumber: applicationEntity.getGst()
-        })
+  const fetchApplication = async (applicationId: string) => await Application.findById(applicationId);
 
-        return newApplication.save()
-    } 
+  const changeStatus = async (id: string) => await Application.updateOne({_id: id}, {$set:{status : "approved"}});
 
-    return {
-        create
-    }
-
+  return {
+    create,
+    fetchAll,
+    fetchApplication,
+    changeStatus,
+  };
 }
 
-export type applicationRepositoryDbInterface = typeof applicationRepositoryDb
+export type ApplicationRepositoryDbInterface = typeof applicationRepositoryDb;

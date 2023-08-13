@@ -78,6 +78,14 @@ import { Link } from "react-router-dom";
           Destination
         </ListItem>
         </Link>
+        <Link to="banners">
+        <ListItem>
+          <ListItemPrefix>
+            <MdTravelExplore className="h-5 w-5" />
+          </ListItemPrefix>
+          Banners
+        </ListItem>
+        </Link>
         {/* <ListItem>
           <ListItemPrefix>
             <InboxIcon className="h-5 w-5" />
