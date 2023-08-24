@@ -5,24 +5,14 @@ import Footer from "../../components/footer/Footer";
 import { useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 
-const BookingsPage = React.lazy(() => import("../../pages/BookingsPage"))
-const Home = React.lazy(() => import("../../pages/Home"))
-const OnwerBookingPage = lazy(() =>
-  import("../../pages/owner/OnwerBookingPage")
+const BookingSuccess = React.lazy(() =>
+  import("../../components/booking/BooingSuccess")
 );
-const OwnerDashboard = lazy(() =>
-  import("../../components/onwer/OwnerDashboard")
-);
-const OwnerBooking = lazy(() => import("../../components/onwer/OwnerBooking"));
-const OwnerBookingDetails = lazy(() =>
-  import("../../components/onwer/OnwerBookingDeails")
-);
-const MyHotel = lazy(() => import("../../pages/MyHotel"));
+const BookingsPage = React.lazy(() => import("../../pages/BookingsPage"));
+const Home = React.lazy(() => import("../../pages/Home"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const Hotels = lazy(() => import("../../pages/Hotels"));
 const HotelDetails = lazy(() => import("../../pages/HotelDetails"));
-const UserRooms = lazy(() => import("../../components/room/UserRooms"));
-const UserRoom = lazy(() => import("../../components/room/UserRoom"));
 
 export default function UserRouter() {
   const state = useSelector((s) => s);
@@ -36,18 +26,20 @@ export default function UserRouter() {
   React.useEffect(() => {}, []);
 
   return (
-    <>
+    <main className="pt-20">
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="hotels"
-          element={
-            <Suspense>
-              <Hotels />
-            </Suspense>
-          }
-        />
+        <Route path="/" element={owner ? <Navigate to="/owner" /> : <Home />} />
+        {!owner && (
+          <Route
+            path="hotels"
+            element={
+              <Suspense>
+                <Hotels />
+              </Suspense>
+            }
+          />
+        )}
         <Route
           path="hotel/:id"
           element={
@@ -64,7 +56,7 @@ export default function UserRouter() {
                 <Profile />
               </Suspense>
             ) : (
-              <Navigate to="/" />
+              <Navigate to="/login" />
             )
           }
         />
@@ -76,92 +68,25 @@ export default function UserRouter() {
                 <BookingsPage />
               </Suspense>
             ) : (
-              <Navigate to="/" />
+              <Navigate to="/login" />
             )
           }
         />
         <Route
-          path="my-hotel"
+          path="success/:id"
           element={
-            token && owner ? (
+            token ? (
               <Suspense>
-                <MyHotel />
+                <BookingSuccess />
               </Suspense>
             ) : (
-              <Navigate to="/" />
+              <Navigate to="/login" />
             )
           }
-        >
-          <Route
-            index
-            element={
-              token ? (
-                <Suspense>
-                  <OwnerDashboard />
-                </Suspense>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="rooms"
-            element={
-              token ? (
-                <Suspense>
-                  <UserRooms hotelId={hotelId} />
-                </Suspense>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="room/:roomId"
-            element={
-              token ? (
-                <Suspense>
-                  <UserRoom hotelId={hotelId} />
-                </Suspense>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="bookings"
-            element={
-              token ? (
-                <Suspense>
-                  <OnwerBookingPage />
-                  {/* <OwnerBooking hotelId={hotelId}/> */}
-                </Suspense>
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          >
-            <Route
-              index
-              element={
-                <Suspense>
-                  <OwnerBooking hotelId={hotelId} />
-                </Suspense>
-              }
-            />
-            <Route
-              path=":bookingId"
-              element={
-                <Suspense>
-                  <OwnerBookingDetails hotelId={hotelId} />
-                </Suspense>
-              }
-            />
-          </Route>
-        </Route>
+        />
         <Route path="*" element={<h1>404 page not found</h1>} />
       </Routes>
       <Footer />
-    </>
+    </main>
   );
 }

@@ -12,7 +12,7 @@ export const fetchUsersData = createAsyncThunk("admin/fetchUsersData", async () 
 
 
 const initialState = {
-    data: null,
+    data: [],
     loading: false,
     error: null,
   }
@@ -21,13 +21,11 @@ const usersViewSlice = createSlice({
     name: "admin/users",
     initialState,
     reducers: {
-        // setUsers: (state, action) => {
-        //     state.data = action.payload?.data
-        // },
-        // removeUsers: (state) =>{
-        //     state.data = null
-        //     localStorage.removeItem("usersView")
-        // }
+       resetStateUsers: (state) => {
+        state.loading = false
+        state.data = []
+        state.error = null
+       }
     },
     extraReducers: (builder) =>{
         builder
@@ -47,6 +45,6 @@ const usersViewSlice = createSlice({
 })
 
 
-export const {setUsers, removeUsers} = usersViewSlice.actions
+export const {resetStateUsers} = usersViewSlice.actions
 
 export default usersViewSlice.reducer

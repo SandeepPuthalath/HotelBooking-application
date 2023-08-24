@@ -4,8 +4,9 @@ import bookingApi from "../../api/bookingApi";
 
 
 export const handleGettingAllBookingsOfHotel = createAsyncThunk('owner/get/bookings', async (payload) => {
+    const {hotelId, page} = payload;
     try {
-        const response = await bookingApi.get(`/owner/${payload}`);
+        const response = await bookingApi.get(`/owner/${hotelId}?page=${page}&limit=5`);
 
         return response.data
     } catch (error) {

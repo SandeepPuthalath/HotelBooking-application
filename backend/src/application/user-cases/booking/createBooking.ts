@@ -51,6 +51,8 @@ export default async function booking(
     price
   } = bookingDetails;
 
+   const dates = createDateArray(checkInDate, checkOutDate);
+
   if (
     !name ||
     !phoneNumber ||
@@ -80,6 +82,7 @@ export default async function booking(
     maxPeople,
     checkInDate,
     checkOutDate,
+    dates.length,
     price
   );
 
@@ -87,7 +90,6 @@ export default async function booking(
 
   const data = await bookingRepo.createBooking(bookingEntity);
 
-  const dates = createDateArray(checkInDate, checkOutDate);
 
   await roomRepo.updateUnavailableDates(roomId, dates);
 

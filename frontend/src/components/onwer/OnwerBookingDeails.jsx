@@ -66,8 +66,8 @@ const OnwerBookingDeails = ({ hotelId }) => {
   };
 
   return (
-    <div className="min-h-screen ">
-      <div className="relative my-10 mx-10 bg-gray-200 shadow-xl rounded-md">
+    <div className="min-h-screen py-10 px-10 bg-gray-200">
+      <div className="relative shadow-xl bg-gray-50 rounded-md">
         <div className="absolute left-5 top-5 flex items-center justify-center gap-1">
           <IconButton onClick={() => navigate(-1)} variant="text" size="lg">
             <BiArrowBack className=" text-blue-600 " size={30} />

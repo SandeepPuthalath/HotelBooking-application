@@ -16,6 +16,9 @@ import destinationsSlice from "../reducers/admin/destination/destinationsSlice";
 import applicationReducer from "../reducers/applications/applicationReducer";
 import destinationReducer from "../reducers/destination/destinationReducer";
 import ownerBookingReducer from "../reducers/owner/ownerBookingReducer";
+import ownerDashboardReducer from "../reducers/owner/ownerDashboardReducer";
+import AdminBannerReducer from "../reducers/admin/AdminBannerReducer";
+import bannerReducer from "../reducers/banner/bannerReducer";
 
 
 const loadState = () => {
@@ -61,6 +64,9 @@ const store = configureStore({
         application:applicationReducer,
         destinations:destinationReducer,
         ownerBooking: ownerBookingReducer,
+        ownerDashboard: ownerDashboardReducer,
+        adminBanner: AdminBannerReducer,
+        banner: bannerReducer,
         
     },
     preloadedState:persistedState

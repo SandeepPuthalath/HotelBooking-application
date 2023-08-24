@@ -17,7 +17,7 @@ import {
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUsersData } from "../redux/reducers/UsersView/usersViewSlice";
+import { fetchUsersData, resetStateUsers } from "../redux/reducers/UsersView/usersViewSlice";
 import { useNavigate } from "react-router-dom";
 import { cloudName } from "../config";
 
@@ -59,6 +59,9 @@ export default function AdminUsersView() {
   useEffect(() => {
     dispatch(fetchUsersData());
     setFilteredUsers(usersDatas);
+
+    return () => dispatch(resetStateUsers())
+
   }, [dispatch]);
 
   if (loading) {

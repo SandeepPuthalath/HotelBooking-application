@@ -42,6 +42,7 @@ const authController = (
 
   const loginUser = asyncHandler(async (req: Request, res: Response) => {
     const { email, password }: { email: string; password: string } = req.body;
+    console.log(email, password)
     const {token, applicantId} = await userLogin(
       email,
       password,

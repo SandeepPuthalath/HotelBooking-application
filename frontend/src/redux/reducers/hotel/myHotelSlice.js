@@ -25,7 +25,13 @@ const initialState = {
 const myHotelSlice = createSlice({
     name: 'user/myhotel',
     initialState,
-    reducers: {},
+    reducers: {
+        resetMyHoel: (state) =>{
+            state.loading = false
+            state.error = null
+            state.data = null
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(addMyHotel.pending, (state) => {
@@ -55,5 +61,5 @@ const myHotelSlice = createSlice({
     }
 })
 
-
+export const {resetMyHoel}  = myHotelSlice.actions
 export default myHotelSlice.reducer

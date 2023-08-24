@@ -3,6 +3,7 @@ import UserRouter from "./user/userRouter";
 import { lazy } from "react";
 import { Suspense } from "react";
 import { useSelector } from "react-redux";
+import OwnerRouter from "./owner/OwnerRouter";
 const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
 const AdminRouter = lazy(() => import("./admin/AdminRouter"));
 const SignupPage = lazy(() => import("../pages/auth/SignupPage"))
@@ -36,6 +37,14 @@ export default function MainRouter() {
         }
       />
       <Route path="/*" element={<UserRouter />} />
+      <Route
+        path="/owner/*"
+        element={
+          <Suspense>
+            <OwnerRouter />
+          </Suspense>
+        }
+      />
       <Route
         path="/admin/*"
         element={

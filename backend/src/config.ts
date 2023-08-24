@@ -1,4 +1,4 @@
-  import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
 const configKeys = {
@@ -11,7 +11,9 @@ const configKeys = {
   TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN as string,
   TWILIO_SERVICE_SID: process.env.TWILIO_SERVICE_SID as string,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL as string,
-  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
+  STRIPE_PRIVET_KEY: process.env.STRIPE_PRIVET_KEY as string,
+  CLIENT_URL: process.env.CLIENT_URL as string,
 };
 
 export default configKeys;

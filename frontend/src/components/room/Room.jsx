@@ -9,6 +9,7 @@ import {
 import { cloudName } from "../../config";
 import BookingDialog from "../../components/booking/BookingDialog";
 import React from "react";
+import PaymentDialog from "../booking/PaymentDialog";
 
 export default function Room(props) {
   const [open, setOpen] = React.useState(false)
@@ -25,7 +26,7 @@ export default function Room(props) {
           <img
             src={`https://res.cloudinary.com/${cloudName}/image/upload/v1689876154/BookIt_uploades/${photos[0]}.jpg`}
             alt="ui/ux review check"
-            className="bg-"
+            className=""
           />
         </CardHeader>
         <CardBody className="flex flex-col">
@@ -43,6 +44,7 @@ export default function Room(props) {
         </CardFooter>
       </Card>
       <BookingDialog open={open} {...props} setOpen={setOpen}/>
+      <PaymentDialog/>
     </>
   );
 }

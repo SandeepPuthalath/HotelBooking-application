@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addMyHotel,
   fetchMyHotelDetails,
+  resetMyHoel,
 } from "../redux/reducers/hotel/myHotelSlice";
 import { FaHotel } from "react-icons/fa";
 import { Rating } from "@material-tailwind/react";
@@ -58,6 +59,8 @@ const MyHotel = () => {
 
   useEffect(() => {
     dispatch(fetchMyHotelDetails(applicantId));
+
+    return () => dispatch(resetMyHoel())
   }, [dispatch]);
 
   const handleIconClick = () => {
@@ -108,7 +111,7 @@ const MyHotel = () => {
   return (
     <>
       {!myHotelData ? (
-        <div className="p-6">
+        <div className="min-h-screen my-20 p-10">
           <Card>
             <CardBody>
               <Typography variant="h3" className="m-2">

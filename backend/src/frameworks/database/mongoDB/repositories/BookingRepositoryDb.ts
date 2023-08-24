@@ -100,8 +100,34 @@ export default function bookingRepositoryDb() {
     return bookings;
   };
 
-  const getAllBookingOfHotel = async (hotelId: string) =>
-    await Booking.find({ hotelId: hotelId });
+  const getAllBookingOfHotel = async (
+    hotelId: string,
+    page: number,
+    limit: number
+  ) => {
+    const hotels = await Booking.find({ hotelId: hotelId });
+    const startIndex = (page - 1) * limit;
+    const lastIndex = page * limit;
+    const results: any = {};
+    results.totalBookings = hotels.length;
+    results.pageCount = Math.ceil(hotels.length/limit);
+
+    if (lastIndex < hotels.length) {
+      results.next = {
+        page: page + 1,
+      };
+    }
+
+    if (startIndex > 0) {
+      results.prev = {
+        page: page - 1,
+      };
+    }
+
+    results.results = hotels.slice(startIndex, lastIndex);
+    console.log(results);
+    return results;
+  };
 
   const changeStatus = async (id: string, status: string) =>
     Booking.findByIdAndUpdate(id)
@@ -114,6 +140,72 @@ export default function bookingRepositoryDb() {
         return booking;
       });
 
+  const getMonthlyRevenu = async (hotelId: mongoose.Types.ObjectId) => {
+    const monthlyRevenu = await Booking.aggregate([
+      {
+        $match: {
+          hotelId: hotelId,
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          totalAmount: { $sum: "$price" },
+        },
+      },
+    ]);
+
+    return monthlyRevenu[0];
+  };
+
+  const getYearlyRevenu = async (hotelId: mongoose.Types.ObjectId) => {
+    const yearlyRevenu = await Booking.aggregate([
+      {
+        $match: {
+          hotelId: hotelId,
+        },
+      },
+      {
+        $group: {
+          _id: { $year: "$createdAt" },
+          totalAmount: { $sum: "$price" },
+        },
+      },
+    ]);
+
+    return yearlyRevenu[0];
+  };
+
+  const getTotalBookings = async (hotelId: mongoose.Types.ObjectId) => {
+    const totalBookings = await Booking.aggregate([
+      {
+        $match: {
+          hotelId: hotelId,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return totalBookings[0];
+  };
+
+  const changePaymentStatus = async (
+    id: mongoose.Types.ObjectId | string,
+    paymentMethod: string
+  ) => {
+    const booking = await Booking.findByIdAndUpdate(
+      id,
+      { $set: { paymentMethod: paymentMethod, paymentStatus: "completerd" } },
+      { new: true }
+    );
+    return booking;
+  };
+
   return {
     createBooking,
     getAllBooking,
@@ -123,6 +215,10 @@ export default function bookingRepositoryDb() {
     getAllBookingsOfUser,
     getAllBookingOfHotel,
     changeStatus,
+    getMonthlyRevenu,
+    getYearlyRevenu,
+    getTotalBookings,
+    changePaymentStatus,
   };
 }
 

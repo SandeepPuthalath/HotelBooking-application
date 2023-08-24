@@ -61,7 +61,7 @@ const HotelOwnerNav = () => {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <Link to="/my-hotel" className="flex items-center">
+        <Link to="/owner" className="flex items-center">
           Dashboard
         </Link>
       </Typography>
@@ -71,7 +71,7 @@ const HotelOwnerNav = () => {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <Link to="/my-hotel/rooms" className="flex items-center">
+        <Link to="/owner/rooms" className="flex items-center">
           My hotels
         </Link>
       </Typography>
@@ -81,7 +81,7 @@ const HotelOwnerNav = () => {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        <Link to="/my-hotel/bookings" className="flex items-center">
+        <Link to="/owner/bookings" className="flex items-center">
           Bookings
         </Link>
       </Typography>
@@ -97,24 +97,20 @@ export default function Header() {
   const decoded = token ? jwtDecode(token) : null;
   const userDetails = decoded ? JSON.parse(decoded?.payload) : null;
   const [openNav, setOpenNav] = React.useState(false);
-  // const [openLogin, setOpenLogin] = React.useState(false);
-  // const [openSignup, setOpenSignup] = React.useState(false);
+ 
 
   const handleLogin = () => {
     navigate("/login");
   };
 
-  // const handleSignupDialog = () => {
-  //   setOpenSignup((s) => !s);
-  // };
-
+  
   React.useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false)
     );
     dispatch(handleFetchAllDestinations());
-  }, []);
+  }, [dispatch]);
 
   const navList = (
     userDetails?.role === "business" ? <HotelOwnerNav/> : <UserNav/>
@@ -122,7 +118,7 @@ export default function Header() {
 
   return (
     <>
-      <Navbar className="sticky bg-blue-gray-300-300 border-none top z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
+      <Navbar className="fixed top-0 bg-gray-50 border-none top z-50 h-max max-w-full rounded-none">
         <div className="flex items-center justify-between text-blue-gray-900">
           <LogoComp size={30} userType={"user"} />
           <div className="flex items-center gap-4">
@@ -131,9 +127,9 @@ export default function Header() {
               <>
                 <Button
                   onClick={handleLogin}
-                  variant="gradient"
+                  variant="text"
                   size="sm"
-                  className="hidden lg:inline-block"
+                  className="hidden lg:inline-block text-gray-900"
                 >
                   <span>Login</span>
                 </Button>

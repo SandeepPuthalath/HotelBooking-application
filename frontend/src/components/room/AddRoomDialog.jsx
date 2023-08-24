@@ -77,7 +77,7 @@ export default function AddRoomDialog({ hotelId, open, onClose }) {
       try {
         dispatch(handleAddRoom({ hotelId, roomData: payloads }));
         toast.success("Room added successfull");
-        onClose();
+        window.location.reload();
       } catch (error) {
         toast.error("Somthing went wrong")
       }

@@ -9,7 +9,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { cloudName } from "../../config";
    
-  export default function RoomCard({photos, _id, title, price, type, desc, maxPeople, roomNumbers}) {
+  export default function RoomCard({photos, _id, title, type, desc}) {
     return (
       <Card className="flex-row w-full max-w-[68rem]">
         <CardHeader shadow={false} floated={false} className="w-2/5 shrink-0 m-0 rounded-r-none">
@@ -27,7 +27,7 @@ import { cloudName } from "../../config";
           <Typography color="gray" className="font-normal mb-8">
             {desc}
           </Typography>
-          <NavLink to={'room/'+_id} className="inline-block">
+          <NavLink to={"/owner/room/"+_id} className="inline-block">
             <Button variant="text" className="flex items-center gap-2">
                View
               <ArrowLongRightIcon strokeWidth={2} className="w-4 h-4" />

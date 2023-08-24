@@ -11,15 +11,22 @@ import cancdelBooking from "../../application/user-cases/booking/cancelBooking";
 import fetchAllBookingsOfHotel from "../../application/user-cases/booking/fetchAllBookingsOfHotel";
 import getBookingDetails from "../../application/user-cases/booking/getBookingDetails";
 import changeBookingStatus from "../../application/user-cases/booking/changeBookingStatus";
+import getHotelPerformance from "../../application/user-cases/booking/getHotelPerformance";
+import { PaymentServiceInterface } from "../../application/services/paymentServiceInterface";
+import { PaymentServicesType } from "../../frameworks/services/paymentServices";
+import payment from "../../application/user-cases/booking/payment";
 
 export default function bookingController(
   bookingRepoInt: BookingRepository,
   bookingRepoDbImp: BookingRepositoryDbType,
   roomRepoInt: RoomRepositoryInterface,
-  roomRepoImp: RoomsRepositoryDbInterface
+  roomRepoImp: RoomsRepositoryDbInterface,
+  paymentInt: PaymentServiceInterface,
+  paymetnImp: PaymentServicesType,
 ) {
   const bookingRepo = bookingRepoInt(bookingRepoDbImp());
   const roomRepo = roomRepoInt(roomRepoImp());
+  const payments = paymentInt(paymetnImp());
 
   const handleBooking = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +36,24 @@ export default function bookingController(
       res.status(HttpStatus.OK).json({
         status: "success",
         message: "Hotel room has been booked successfully",
+        booking: data,
       });
+    }
+  );
+
+  const handlePayment = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      console.log("in payment section");
+
+      const { paymentMethod } = req.body;
+      const id : any= req.query.id
+      console.log(id, paymentMethod)
+      const data = await payment(id , paymentMethod, payments, bookingRepo, roomRepo);
+
+      console.log(data)
+
+      res.status(HttpStatus.OK).json({status: "success", message: "payment has been successfull", url: data?.url});
+
     }
   );
 
@@ -63,8 +87,11 @@ export default function bookingController(
   const handleGettingAllBookingOfHotel = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const { hotelId } = req.params;
+      const page = parseInt(req.query?.page as string);
+      const limit = parseInt(req.query?.limit as string);
+      console.log("pagination parameters",page, limit)
 
-      const bookings = await fetchAllBookingsOfHotel(hotelId, bookingRepo);
+      const bookings = await fetchAllBookingsOfHotel(hotelId,page, limit, bookingRepo);
 
       res.status(HttpStatus.OK).json({
         status: "success",
@@ -90,18 +117,32 @@ export default function bookingController(
 
   const handleStatsuChange = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-     
       const bookingId = req.query?.bookingId?.toString();
       const status = req.query?.status?.toString();
 
       await changeBookingStatus(bookingId, status, bookingRepo);
 
-      res
-        .status(HttpStatus.OK)
-        .json({
-          status: "success",
-          message: "Successfully updated booking status",
-        });
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "Successfully updated booking status",
+      });
+    }
+  );
+
+  const handleFetchingHotelPerformance = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const hotelId = req.query?.hotelId?.toString();
+
+      const { monthlyRevenu, yearlyRevenu, totalBookings } =
+        await getHotelPerformance(hotelId, bookingRepo);
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "successfully fetched performance",
+        monthlyRevenu,
+        yearlyRevenu,
+        totalBookings,
+      });
     }
   );
 
@@ -112,5 +153,7 @@ export default function bookingController(
     handleGettingAllBookingOfHotel,
     handleFetchingBookingDetails,
     handleStatsuChange,
+    handleFetchingHotelPerformance,
+    handlePayment,
   };
 }

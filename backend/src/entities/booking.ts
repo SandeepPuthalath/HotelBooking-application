@@ -11,6 +11,7 @@ export default function booking(
   maxPeople: number,
   checkInDate: string,
   checkOutDate: string,
+  totalDays: number,
   price: number,
 ) {
   return {
@@ -24,6 +25,7 @@ export default function booking(
     getMaxPeople: (): number => maxPeople,
     checkInDate: (): string => checkInDate,
     checkOutDate: ():string => checkOutDate,
+    getTotalDays: (): number => totalDays,
     getPrice: (): number => price
   };
 }

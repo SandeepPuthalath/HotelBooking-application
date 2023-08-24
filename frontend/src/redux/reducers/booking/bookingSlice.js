@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import bookingApi from "../../api/bookingApi";
+import { instance } from "../../api/instance";
 
 
 export const handleBookingRoom = createAsyncThunk("room/booking", async (payload) => {
@@ -8,8 +9,18 @@ export const handleBookingRoom = createAsyncThunk("room/booking", async (payload
 
         return response.data
     } catch (error) {
-        console.log(error)
-        throw new Error(error)
+        return Promise.reject(error)
+    }
+})
+
+export const handlePayment = createAsyncThunk("payment", async ({paymentMethod, bookingId}) => {
+    try {
+        const response = await instance.put(`/booking/?id=${bookingId}`, {paymentMethod})
+
+        return response.data;
+    }
+    catch (error) {
+        return Promise.reject(error);
     }
 })
 
@@ -51,7 +62,7 @@ const bookingSlice = createSlice({
     name: 'hotel/room/booking',
     initialState,
     reducers: {
-        resetState: (state) => {
+        resetBookingState: (state) => {
             state.loading = false
             state.bookings = []
             state.booking = null
@@ -67,7 +78,7 @@ const bookingSlice = createSlice({
             })
             .addCase(handleBookingRoom.fulfilled, (state, action) => {
                 state.loading = false
-                state.booking = action.payload?.data
+                state.booking = action.payload?.booking
                 state.message = action.payload?.message
             })
             .addCase(handleBookingRoom.rejected, (state, action) => {
@@ -98,9 +109,21 @@ const bookingSlice = createSlice({
                 state.loading = false
                 state.error = action.error.message;
             })
+            .addCase(handlePayment.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(handlePayment.fulfilled, (state, action) => {
+                state.loading = false
+                state.message = action.payload?.message
+            })
+            .addCase(handlePayment.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message;
+            })
 
     }
 })
 
-export const { resetState } = bookingSlice.actions
+export const { resetBookingState } = bookingSlice.actions
 export default bookingSlice.reducer

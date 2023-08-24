@@ -4,6 +4,8 @@ import bookingRepository from "../../../application/repositories/BookingReposito
 import bookingRepositoryDb from "../../database/mongoDB/repositories/BookingRepositoryDb";
 import roomRepository from "../../../application/repositories/roomRepository";
 import roomsRepositoryDb from "../../database/mongoDB/repositories/roomsRepositoryDb";
+import paymentServices from "../../services/paymentServices";
+import paymentServicesInterface from "../../../application/services/paymentServiceInterface";
 
 const bookingRouter = () => {
   const router = express.Router();
@@ -12,12 +14,15 @@ const bookingRouter = () => {
     bookingRepository,
     bookingRepositoryDb,
     roomRepository,
-    roomsRepositoryDb
+    roomsRepositoryDb,
+    paymentServicesInterface,
+    paymentServices,
   );
 
   router
     .route("/")
     .post(controller.handleBooking)
+    .put(controller.handlePayment)
     .get(controller.handleFetchingBookingDetails)
     .patch(controller.handleStatsuChange);
 
@@ -26,6 +31,9 @@ const bookingRouter = () => {
   router.route("/:bookingId").patch(controller.handleCancelBooking);
 
   router.get("/owner/:hotelId", controller.handleGettingAllBookingOfHotel);
+
+  router.get('/hotel/performance', controller.handleFetchingHotelPerformance);
+
 
   return router;
 };

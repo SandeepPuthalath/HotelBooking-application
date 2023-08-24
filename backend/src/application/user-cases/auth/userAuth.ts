@@ -22,14 +22,23 @@ export const userRegister = async (
   user.email = user?.email.toLowerCase();
   const isExistingEmail = await userRepository.getUserByEmail(user?.email);
   if (isExistingEmail) {
-    throw new AppError("This email already register with an account", HttpStatus.UNAUTHORIZED);
+    throw new AppError(
+      "This email already register with an account",
+      HttpStatus.UNAUTHORIZED
+    );
   }
 
   user.password = await authService.encryptPassword(user?.password);
-  const {firstName, lastName, email, phoneNumber, password} = user
-  const userEntity : UserEntityType = createUserEntity(firstName, lastName, email, phoneNumber, password);
+  const { firstName, lastName, email, phoneNumber, password } = user;
+  const userEntity: UserEntityType = createUserEntity(
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    password
+  );
 
-  console.log(userEntity.getLastName())
+  console.log(userEntity.getLastName());
 
   const createdUser: any = await userRepository.addUser(userEntity);
 
@@ -48,23 +57,26 @@ export const userLogin = async (
   const user: CreateUserInterface | null = await userRepository.getUserByEmail(
     email
   );
-  const applicantId = user?._id;
-
-  const userDetails = removePasswordField(user)
 
   if (!user) {
     throw new AppError("this user doesn't exist", HttpStatus.UNAUTHORIZED);
   }
+
+  const applicantId = user?._id;
+
   const isPasswordCorrect = await authService.comparePassword(
     password,
     user.password
   );
+
   if (!isPasswordCorrect) {
     throw new AppError(
       "Sorry, your password was incorrect. Please double-check your password",
       HttpStatus.UNAUTHORIZED
     );
   }
+
+  const userDetails = removePasswordField(user);
   const token = authService.generateToken(JSON.stringify(userDetails));
   return { token, applicantId };
 };

@@ -55,10 +55,24 @@ const bookingSchema = new mongoose.Schema(
       trim: true,
       require: true,
     },
+    totalDays:{
+      type: Number,
+      require: true,
+    },
     price:{
       type: Number,
       trim: true,
       require: true
+    },
+    paymentMethod:{
+      type: String,
+      trim: true,
+      default: "pay_on_checkout"
+    },
+    paymentStatus:{
+      type:String,
+      trim:true,
+      default:"pending"
     },
     status:{
       type:String,
@@ -68,6 +82,7 @@ const bookingSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 
 const Booking = mongoose.model("Booking", bookingSchema);
 

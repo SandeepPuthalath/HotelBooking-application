@@ -15,7 +15,7 @@ import { cloudName } from "../../config";
   export function HotelDetailsCard({photos, name, address, distance, rating, desc, _id}) {
 
     return (
-      <Card className="w-full max-w-[26rem] shadow-lg">
+      <Card className="w-full shadow-lg">
         <CardHeader floated={false} color="blue-gray">
           <img
             src={`https://res.cloudinary.com/${cloudName}/image/upload/v1689876154/BookIt_uploades/${photos[0]}.jpg`}

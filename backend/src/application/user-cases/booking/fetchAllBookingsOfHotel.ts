@@ -6,13 +6,13 @@ import AppError from "../../../utils/appError";
 
 
 
-export default async function fetchAllBookingsOfHotel(hotelId: string, repository: ReturnType<BookingRepositoryDbType>){
+export default async function fetchAllBookingsOfHotel(hotelId: string, page:number, limit: number, repository: ReturnType<BookingRepositoryDbType>){
 
     if(!hotelId){
         throw new AppError("Bad request", HttpStatus.BAD_REQUEST);
     }
 
-    const bookings = await repository.getAllBookingOfHotel(hotelId);
+    const bookings = await repository.getAllBookingOfHotel(hotelId, page, limit);
 
     return bookings;
 }

@@ -39,6 +39,16 @@ const RoomSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+RoomSchema.pre("save", async function(next){
+  const currentDate = new Date();
+  this.unavailbleDates =this.unavailbleDates.filter(date => date >= currentDate);
+  next()
+})
+
 const Room = mongoose.model("Room", RoomSchema);
 
+
 export default Room;
+
+
+

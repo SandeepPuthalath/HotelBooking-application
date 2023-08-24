@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllRooms } from "../../redux/reducers/room/roomsSlice";
 import RoomCard from "./RoomCard";
 import AddRoomDialog from "./AddRoomDialog";
+import Loading from "../auth/Loading";
 
 const filterRooms = (search, rooms) => {
   return rooms.filter((room) =>
@@ -25,7 +26,7 @@ const UserRooms = ({ hotelId }) => {
     setFilteredRooms(roomsData);
   }, [dispatch]);
 
-  const handleSearch = (event) => {
+  const handleSearch = (event) =>{
     const search = event.target.value;
     const filteredData = filterRooms(search, roomsData);
     setFilteredRooms(filteredData);
@@ -34,12 +35,9 @@ const UserRooms = ({ hotelId }) => {
   const handleOpen = () => setOpen((s) => !s);
 
   if (loading) {
-    return <h1>Loading.....</h1>;
+    return <Loading/>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   return (
     <>
@@ -63,7 +61,7 @@ const UserRooms = ({ hotelId }) => {
           </div>
         </div>
         <div className="flex flex-col gap-4 my-10">
-          {filteredRooms.map((room) => (
+          {filteredRooms?.map((room) => (
             <RoomCard key={room?._id} {...room} />
           ))}
         </div>

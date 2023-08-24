@@ -30,7 +30,7 @@ export default function LoginForm() {
     },
     validationSchema,
     onSubmit: (payloads) => {
-      dispatch(userLogin(payloads));
+      dispatch(userLogin(payloads))
       formik.resetForm()
     },
   });

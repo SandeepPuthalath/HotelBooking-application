@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { handleDestinationSearch } from "../redux/reducers/hotel/hotelSlice";
+import Loading from "../components/auth/Loading"
 
 const HotelCard = React.lazy(() => import( "../components/hotel/hotelCard"))  
 
@@ -34,35 +35,53 @@ export default function Hotels() {
     dispatch(handleDestinationSearch(destination))
   };
 
-  if (loading) return <HotelGridSkeleton />;
+  if (loading) return <Loading/>;
 
   return (
-    <>
-      <div className="flex bg-gray-900 p-8 gap-2">
-        <div className="w-72">
-          <Select onChange={handleSetSearchValue} label="Select a destination" name="destination">
-           { destinations.map(destination => <Option key={destination?.key} value={destination?.name}>{destination?.name}</Option>)}
+    <section className="">
+      <div className="flex justify-center gap-2 py-5">
+        <div className="">
+          <Select
+            onChange={handleSetSearchValue}
+            label="Select a destination"
+            name="destination"
+          >
+            {destinations.map((destination) => (
+              <Option key={destination?._id} value={destination?.name}>
+                {destination?.name}
+              </Option>
+            ))}
           </Select>
         </div>
         <div>
-          <Button onClick={handleSearch} className="shadow-none bg-gray-300 text-gray-700">Search</Button>
+          <Button
+            size="md"
+            onClick={handleSearch}
+            className="shadow-none rounded-sm bg-gray-900 text-gray-100"
+          >
+            Search
+          </Button>
         </div>
       </div>
-      <div className="flex flex-row items-center justify-center mt-4">
-        <Typography variant="h3">
-          Hotels
-        </Typography>
-      </div>
-      <div className="grid md:grid-cols-3 gap-8 items-center justify-center p-20">
-        {hotels.map((hotel) => (
-          <Link to={"/hotel/" + hotel._id} key={hotel?._id}>
-            <HotelCard {...hotel} />
-          </Link>
-        ))}
-        <div className="md:col-span-2 max-h-[61vh] overflow-y-scroll no-scrollbar">
-          <div className="flex flex-col gap-5"></div>
+      <div className="mt-10 ">
+        <div className="flex justify-center">
+          <Typography variant="h3" className="uppercase font-semibold">
+            Hotels
+          </Typography>
         </div>
       </div>
-    </>
+      <div className="px-10 py-10 min-h-screen">
+        <div className="grid md:grid-cols-3 items-center justify-center gap-5">
+          {hotels.map((hotel) => (
+            <Link to={"/hotel/" + hotel._id} key={hotel?._id}>
+              <HotelCard {...hotel} />
+            </Link>
+          ))}
+          {/* <div className="md:col-span-2 max-h-[61vh] overflow-y-scroll no-scrollbar">
+            <div className="flex flex-col gap-5"></div>
+          </div> */}
+        </div>
+      </div>
+    </section>
   );
 }

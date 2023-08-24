@@ -9,17 +9,21 @@ import hotelRouter from "./hotel";
 import roomRouter from "./room";
 import bookingRouter from "./booking";
 import destinationRouter from "./destination";
+import bannerRouter from "./banner";
+import adminJwtTokenVerification from "../middlewares/adminJwtTokenVerificationts";
 
 const routes = (app: Application) => {
+  
   app.use("/api/auth", authRouter());
   app.use("/api/user", userRouter());
   app.use("/api/hotel", hotelRouter());
   app.use("/api/application", applicationRoute());
   app.use("/api/room", roomRouter());
-  app.use("/api/booking",  bookingRouter());
+  app.use("/api/booking",  jwtTokenVerify, bookingRouter());
   app.use("/api/adminAuth", adminAuthRoute());
   app.use("/api/admin", jwtTokenVerify, adminRoute());
-  app.use("/api/destination", destinationRouter());
+  app.use("/api/destination/", destinationRouter());
+  app.use("/api/banner", bannerRouter());
 
 };
 

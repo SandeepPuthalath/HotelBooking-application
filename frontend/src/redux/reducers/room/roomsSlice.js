@@ -58,7 +58,7 @@ const roomsSlice = createSlice({
             })
             .addCase(handleAddRoom.fulfilled, (state, action) => {
                 state.loading = false
-                state.data.push(action.payload?.data)
+                state.data = [...state.data, action.payload?.data]
             })
             .addCase(handleAddRoom.rejected, (state, action) => {
                 state.loading = false

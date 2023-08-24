@@ -4,8 +4,11 @@ import { useSelector } from "react-redux";
 import AdminLoginPage from "../../pages/AdminLoginPage";
 import AdminDashboard from "../../pages/AdminDashboard";
 import AdminLayout from "../../components/admin/AdminLayout";
-const AddBanner = lazy(() => import("../../components/admin/banner/AddBanner"))
-const BannerList = lazy(() => import("../../components/admin/banner/BannerList"))
+const AddBanner = lazy(() => import("../../components/admin/banner/AddBanner"));
+const BannerList = lazy(() =>
+  import("../../components/admin/banner/BannerList")
+);
+const BannerDetails = React.lazy(() => import("../../components/admin/banner/BannerDetails"))
 const AdminBannerManagement = lazy(() =>
   import("../../pages/auth/AdminBannerManagement")
 );
@@ -97,8 +100,20 @@ const AdminRouter = () => {
               element={
                 token?.access ? (
                   <Suspense>
-                  <BannerList/>
-                </Suspense>
+                    <BannerList />
+                  </Suspense>
+                ) : (
+                  <Navigate to="/admin/login" />
+                )
+              }
+            />
+             <Route
+              path=":bannerId"
+              element={
+                token?.access ? (
+                  <Suspense>
+                    <BannerDetails/>
+                  </Suspense>
                 ) : (
                   <Navigate to="/admin/login" />
                 )
@@ -108,7 +123,9 @@ const AdminRouter = () => {
               path="add-banner"
               element={
                 token?.access ? (
-                  <AddBanner/>
+                  <Suspense>
+                    <AddBanner />
+                  </Suspense>
                 ) : (
                   <Navigate to="/admin/login" />
                 )

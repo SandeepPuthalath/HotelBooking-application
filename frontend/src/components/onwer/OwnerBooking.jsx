@@ -4,6 +4,8 @@ import Loading from "../auth/Loading";
 import { handleGettingAllBookingsOfHotel } from "../../redux/reducers/owner/ownerBookingReducer";
 import {BiEdit} from "react-icons/bi"
 import { Link } from "react-router-dom";
+import { Button, IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 
 const BookingTableRow = ({ _id, name, price, phoneNumber, email, status, no }) => {
@@ -40,13 +42,37 @@ const OwnerBooking = ({ hotelId }) => {
   const dispatch = useDispatch();
   const loading = useSelector((s) => s.ownerBooking?.loading);
   const bookings = useSelector((s) => s.ownerBooking?.bookings);
-
+  const [active, setActive] = React.useState(1);
+  const pagesArray = Array.from(
+    { length: bookings?.pageCount },
+    (_, index) => index + 1
+  );
   React.useEffect(() => {
-    dispatch(handleGettingAllBookingsOfHotel(hotelId));
-  }, []);
+    dispatch(handleGettingAllBookingsOfHotel({hotelId, page:active}));
+  }, [active]);
+
+
+  const getItemProps = (index) => ({
+    variant: active === index ? "filled" : "text",
+    color: "gray",
+    onClick: () => setActive(index),
+  });
+
+  const next = () => {
+    if (active === bookings?.pageCount) return;
+
+    setActive(active + 1);
+  };
+
+  const prev = () => {
+    if (active === 1) return;
+
+    setActive(active - 1);
+  };
+
 
   if (loading) {
-    console.log("got here", loading);
+
     return (
       <div className="min-h-screen">
         <Loading />
@@ -55,7 +81,7 @@ const OwnerBooking = ({ hotelId }) => {
   }
 
   return (
-    <div className="mx-10 my-10">
+    <div className="min-h-screen mx-10 my-10">
       <div className="flex my-2 justify-center items-center">
         <span className="text-2xl font-semibold uppercase">
           Booking Details
@@ -88,12 +114,36 @@ const OwnerBooking = ({ hotelId }) => {
               </th>
             </tr>
           </thead>
-          <tbody>
-            {bookings.map((booking, index) => (
-              <BookingTableRow key={booking._id} {...booking}  no={index+1}/>
+          <tbody className="h-[20rem]">
+            {bookings?.results.map((booking, index) => (
+              <BookingTableRow key={booking._id} {...booking} no={index + 1} />
             ))}
           </tbody>
         </table>
+        <div className="flex my-2 items-center gap-4">
+          <Button
+            variant="text"
+            className="flex items-center gap-2"
+            onClick={prev}
+            disabled={active === 1}
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+          </Button>
+          <div className="flex items-center gap-2">
+            {pagesArray.map((item) => (
+              <IconButton {...getItemProps(item)}>{item}</IconButton>
+            ))}
+          </div>
+          <Button
+            variant="text"
+            className="flex items-center gap-2"
+            onClick={next}
+            disabled={active === bookings?.pageCount}
+          >
+            Next
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );
