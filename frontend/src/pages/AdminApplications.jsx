@@ -60,7 +60,7 @@ export default function AdminApplications() {
             </tr>
           </thead>
           <tbody>
-            {applications.map(
+            {applications?.map(
               (
                 { _id, name, applicantId, GSTNumber, createdAt, status },
                 index

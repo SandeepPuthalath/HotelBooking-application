@@ -9,18 +9,37 @@ export default function hotelRepository(
   const create = async (hotelEntity: HotelEntityInterface) =>
     await repository.create(hotelEntity);
 
-  const update =async (id:mongoose.Types.ObjectId, updates: HotelUpdateType) => await repository.update(id, updates);
+  const update = async (
+    id: mongoose.Types.ObjectId,
+    updates: HotelUpdateType
+  ) => await repository.update(id, updates);
 
-  const remove = async (id:mongoose.Types.ObjectId) => await repository.remove(id);
+  const remove = async (id: mongoose.Types.ObjectId) =>
+    await repository.remove(id);
 
-  const view =async (id:mongoose.Types.ObjectId) =>  await repository.view(id);
+  const view = async (id: mongoose.Types.ObjectId) => await repository.view(id);
 
-  const viewAll =async () => await repository.viewAll();
+  const viewAll = async () => await repository.viewAll();
 
-  const userHotel =async (userId:mongoose.Types.ObjectId) => await repository.userHotel(userId)
+  const userHotel = async (userId: mongoose.Types.ObjectId) =>
+    await repository.userHotel(userId);
 
-  const findByDestination =async (destination:string) => await repository.findByDestination(destination) 
+  const findByDestination = async (destination: string) =>
+    await repository.findByDestination(destination);
 
+  const rateHotel = async (
+    star: number,
+    hotelId: string | mongoose.Types.ObjectId,
+    userId: string | mongoose.Types.ObjectId
+  ) => await repository.rateHotel(star, hotelId, userId);
+
+  const updateRating = async (star: number, alreadyRated: any) =>
+    await repository.updateRating(star, alreadyRated);
+
+  const updateTotalRating = async (
+    totalRating: number,
+    hotelId: string | mongoose.Types.ObjectId
+  ) => await repository.updateTotalRating(totalRating, hotelId);
 
   return {
     create,
@@ -29,7 +48,10 @@ export default function hotelRepository(
     view,
     viewAll,
     userHotel,
-    findByDestination
+    findByDestination,
+    rateHotel,
+    updateRating,
+    updateTotalRating,
   };
 }
 

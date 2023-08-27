@@ -125,7 +125,7 @@ export default function bookingRepositoryDb() {
     }
 
     results.results = hotels.slice(startIndex, lastIndex);
-    console.log(results);
+    
     return results;
   };
 

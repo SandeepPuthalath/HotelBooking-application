@@ -39,7 +39,7 @@ export default function HotelCard({
           {name}
         </Typography>
         <div className="flex justify-between items-center">
-          <Rating value={rating} />
+          <Rating value={rating} readonly/>
         </div>
         <div className="flex justify-start items-center">
           <MdLocationPin color="red" />

@@ -4,6 +4,9 @@ import Header from "../../components/Navbar/Header";
 import Footer from "../../components/footer/Footer";
 import { useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const BookingSuccess = React.lazy(() =>
   import("../../components/booking/BooingSuccess")
@@ -87,6 +90,18 @@ export default function UserRouter() {
         <Route path="*" element={<h1>404 page not found</h1>} />
       </Routes>
       <Footer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </main>
   );
 }

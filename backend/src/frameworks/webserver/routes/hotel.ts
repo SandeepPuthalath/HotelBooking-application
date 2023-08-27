@@ -16,7 +16,7 @@ export default function hotelRouter(){
     router.delete('/delete/:id', controller.handleDeleteHotel);
     router.get('/myhotel/:userId',jwtTokenVerification, controller.handleGetMyHotelDetails);
     router.get('/search/:destination', controller.handleDestinationSearch);
-
+    router.put("/rating", jwtTokenVerification, controller.handleRating);
 
     return router
 }

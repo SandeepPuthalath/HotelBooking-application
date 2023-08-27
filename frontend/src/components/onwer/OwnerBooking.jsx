@@ -115,7 +115,7 @@ const OwnerBooking = ({ hotelId }) => {
             </tr>
           </thead>
           <tbody className="h-[20rem]">
-            {bookings?.results.map((booking, index) => (
+            {bookings?.results?.map((booking, index) => (
               <BookingTableRow key={booking._id} {...booking} no={index + 1} />
             ))}
           </tbody>

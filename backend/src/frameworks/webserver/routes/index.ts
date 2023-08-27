@@ -11,6 +11,7 @@ import bookingRouter from "./booking";
 import destinationRouter from "./destination";
 import bannerRouter from "./banner";
 import adminJwtTokenVerification from "../middlewares/adminJwtTokenVerificationts";
+import reviewRouter from "./review";
 
 const routes = (app: Application) => {
   
@@ -24,6 +25,7 @@ const routes = (app: Application) => {
   app.use("/api/admin", jwtTokenVerify, adminRoute());
   app.use("/api/destination/", destinationRouter());
   app.use("/api/banner", bannerRouter());
+  app.use('/api/review', reviewRouter())
 
 };
 

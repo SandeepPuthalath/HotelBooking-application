@@ -9,8 +9,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AccountMenu from "../user/AccountMenu";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import LogoComp from "../logo/LogoComp";
 import jwtDecode from "jwt-decode";
 import { handleFetchAllDestinations } from "../../redux/reducers/admin/destination/destinationsSlice";
@@ -198,7 +196,6 @@ export default function Header() {
           )}
         </Collapse>
       </Navbar>
-      <ToastContainer />
     </>
   );
 }

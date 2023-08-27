@@ -17,11 +17,12 @@ const RoomImageView = ({ photos, roomId, hotelId }) => {
     <>
       <div className="mx-2 my-2">
         <figure>
-          <img
+         { photos && <img
+            loading="lazy"
             className="h-96 w-full rounded-lg object-cover object-center"
             src={`https://res.cloudinary.com/${cloudName}/image/upload/v1689876154/BookIt_uploades/${photos[selected]}.jpg`}
             alt=""
-          />
+          />}
           <Typography
             as="small"
             variant="small"
@@ -31,7 +32,7 @@ const RoomImageView = ({ photos, roomId, hotelId }) => {
           </Typography>
         </figure>
         <div className="flex flex-row overflow-x-auto h-52  justify-center items-center gap-2 my-2">
-          {photos.map((photo, index) => {
+          {photos?.map((photo, index) => {
             return (
               <img
                 key={index}

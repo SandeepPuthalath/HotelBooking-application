@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { viewAllHotels } from "./hotelThunk";
 import hotelAxios from "../../api/hotelApi";
+import { instance } from "../../api/instance";
 
 
 export const handleDestinationSearch = createAsyncThunk("hotels/search", async (payload) =>{
@@ -15,6 +16,8 @@ export const handleDestinationSearch = createAsyncThunk("hotels/search", async (
     throw new Error(error)
   }
 })
+
+
 
 const initialState = {
   loading: false,

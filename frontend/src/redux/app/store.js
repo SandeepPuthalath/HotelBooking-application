@@ -19,6 +19,7 @@ import ownerBookingReducer from "../reducers/owner/ownerBookingReducer";
 import ownerDashboardReducer from "../reducers/owner/ownerDashboardReducer";
 import AdminBannerReducer from "../reducers/admin/AdminBannerReducer";
 import bannerReducer from "../reducers/banner/bannerReducer";
+import reviewReducer from "../reducers/user/reviewReducer";
 
 
 const loadState = () => {
@@ -67,6 +68,7 @@ const store = configureStore({
         ownerDashboard: ownerDashboardReducer,
         adminBanner: AdminBannerReducer,
         banner: bannerReducer,
+        review: reviewReducer,
         
     },
     preloadedState:persistedState

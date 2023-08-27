@@ -11,6 +11,7 @@ import { HttpStatus } from "../../types/httpStatus";
 import mongoose from "mongoose";
 import getUserHotel from "../../application/user-cases/hotel/getUserHotel";
 import viewByDestination from "../../application/user-cases/hotel/viewByDestination";
+import ratingHotel from "../../application/user-cases/hotel/ratingHotel";
 
 export default function hotelController(
   hotelRepositoryDb: hotelRepositoryInterface,
@@ -92,12 +93,11 @@ export default function hotelController(
 
   const handleGetMyHotelDetails = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-     
       const userId = req.params?.userId;
       const data = await getUserHotel(
         new mongoose.Types.ObjectId(userId),
         repository
-      )
+      );
 
       res.status(HttpStatus.OK).json({
         status: "success",
@@ -121,6 +121,20 @@ export default function hotelController(
     }
   );
 
+  const handleRating = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { star, userId, hotelId } = req.body;
+      const result = await ratingHotel(star, userId, hotelId, repository);
+      res
+        .status(HttpStatus.OK)
+        .json({
+          status: "success",
+          message: "Rating added successfully",
+          result: result,
+        });
+    }
+  );
+
   return {
     handleAddHotel,
     handleUpdateHotel,
@@ -129,5 +143,6 @@ export default function hotelController(
     handleViewAllHotels,
     handleGetMyHotelDetails,
     handleDestinationSearch,
+    handleRating,
   };
 }
