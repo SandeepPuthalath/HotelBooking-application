@@ -47,7 +47,7 @@ const BookingCard = (probs) => {
     });
   };
   return (
-    <div className="card bg-blue-gray-400 rounded-md">
+    <div className="card bg-blue-gray-400 rounded-md px-5 py-5">
       <div className="flex justify-center border-gray-400 border-b-[1px]">
         <h1 className="text-lg font-semibold">Booking details</h1>
       </div>

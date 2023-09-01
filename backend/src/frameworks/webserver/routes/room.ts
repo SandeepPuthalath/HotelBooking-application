@@ -9,17 +9,18 @@ export default function roomRouter() {
   const router = express.Router();
 
   const controller = roomController(
-    roomRepository, 
+    roomRepository,
     roomsRepositoryDb,
     hotelRepository,
     hotelRepositoryDb
-    );
+  );
 
   router.post("/:hotelId", controller.handleAddRoom);
-  router.get('/:hotelId', controller.handleGetAllRooms);
-  router.get('/details/:hotelId/:roomId', controller.handleGetRoomDetails);
-  router.post('/add/img/:hotelId/:roomId', controller.handleAddRoomImage);
-  router.post('/', controller.handleSearchRoom);
+  router.get("/:hotelId", controller.handleGetAllRooms);
+  router.route("/:id").put(controller.handleUpdateRoomDetails);
+  router.get("/details/:hotelId/:roomId", controller.handleGetRoomDetails);
+  router.post("/add/img/:hotelId/:roomId", controller.handleAddRoomImage);
+  router.post("/", controller.handleSearchRoom);
 
   return router;
 }

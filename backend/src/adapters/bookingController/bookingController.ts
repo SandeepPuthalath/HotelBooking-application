@@ -15,6 +15,7 @@ import getHotelPerformance from "../../application/user-cases/booking/getHotelPe
 import { PaymentServiceInterface } from "../../application/services/paymentServiceInterface";
 import { PaymentServicesType } from "../../frameworks/services/paymentServices";
 import payment from "../../application/user-cases/booking/payment";
+import fetchUserBooking from "../../application/user-cases/booking/fetchUserBooking";
 
 export default function bookingController(
   bookingRepoInt: BookingRepository,
@@ -60,8 +61,10 @@ export default function bookingController(
   const handleGetAllBookingsOfUser = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const { userId } = req.params;
+      const page = parseInt(req.query?.page as string);
+      const limit = parseInt(req.query?.limit as string);
 
-      const data = await getAllUserBookings(userId, bookingRepo);
+      const data = await getAllUserBookings(userId, page, limit, bookingRepo);
 
       res.status(HttpStatus.OK).json({
         status: "success",
@@ -146,6 +149,17 @@ export default function bookingController(
     }
   );
 
+
+  const handleGetBookingDetailsOfUser = expressAsyncHandler(async (req, res) =>{
+    const {id} = req.params
+    const bookingDetails = await fetchUserBooking(id, bookingRepo);
+    res.status(HttpStatus.OK).json({
+      status: "success",
+      message: "Successfully fetched data",
+      bookingDetails:bookingDetails[0]
+    })
+  })
+
   return {
     handleBooking,
     handleGetAllBookingsOfUser,
@@ -155,5 +169,6 @@ export default function bookingController(
     handleStatsuChange,
     handleFetchingHotelPerformance,
     handlePayment,
+    handleGetBookingDetailsOfUser
   };
 }

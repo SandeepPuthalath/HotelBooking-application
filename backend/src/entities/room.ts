@@ -2,7 +2,6 @@ export default function room(
   hotelId: string,
   title: string,
   price: number,
-  type: string,
   maxPeople: number,
   desc: string,
   photos: string,
@@ -14,7 +13,6 @@ export default function room(
     getMaxPeople: (): number => maxPeople,
     getPhotos: () :string => photos,
     getHotelId: ():string => hotelId,
-    getType: (): string => type,
   };
 }
 

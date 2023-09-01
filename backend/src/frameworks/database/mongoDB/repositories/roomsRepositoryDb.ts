@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 export interface RoomType {
   title: string;
   price: number;
-  type: string;
   maxPeople: number;
   desc: string;
   photos: string;
@@ -18,7 +17,6 @@ export default function roomsRepositoryDb() {
       hoteId: roomEntity.getHotelId(),
       title: roomEntity.getTitile(),
       price: roomEntity.getPrice(),
-      type: roomEntity.getType(),
       maxPeople: roomEntity.getMaxPeople(),
       desc: roomEntity.getDesc(),
     });
@@ -45,7 +43,7 @@ export default function roomsRepositoryDb() {
   ) => {
     return await Room.findByIdAndUpdate(
       roomId,
-      { $set: { updates } },
+      { $set: { ...updates } },
       { new: true }
     );
   };

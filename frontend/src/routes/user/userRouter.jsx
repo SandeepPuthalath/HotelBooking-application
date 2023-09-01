@@ -7,11 +7,12 @@ import jwtDecode from "jwt-decode";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
+const BookingLayout  = React.lazy(() => import("../../components/booking/BookingLayout"))
 const BookingSuccess = React.lazy(() =>
   import("../../components/booking/BooingSuccess")
 );
 const BookingsPage = React.lazy(() => import("../../pages/BookingsPage"));
+const BookingDetais =  React.lazy(() => import ("../../components/booking/BookingDetails"))
 const Home = React.lazy(() => import("../../pages/Home"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const Hotels = lazy(() => import("../../pages/Hotels"));
@@ -68,13 +69,16 @@ export default function UserRouter() {
           element={
             token ? (
               <Suspense>
-                <BookingsPage />
+                <BookingLayout/>
               </Suspense>
             ) : (
               <Navigate to="/login" />
             )
           }
-        />
+        >
+          <Route index={true} element={<BookingsPage/>}/>
+          <Route path=":id" element={<BookingDetais/>}/>
+        </Route>
         <Route
           path="success/:id"
           element={

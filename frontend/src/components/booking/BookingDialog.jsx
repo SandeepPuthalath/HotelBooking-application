@@ -51,17 +51,9 @@ const validationSchema = Yup.object().shape({
   checkOutDate: Yup.date().required("Please select check out date"),
 });
 
-const initialValues = {
-  name: "",
-  phoneNumber: "",
-  email: "",
-  address: "",
-  maxPeople: "",
-  checkInDate: "",
-  checkOutDate: "",
-};
 
-const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
+
+const BookingDialog = ({ open, setOpen, photos, checkInDate, checkOutDate, ...roomInfo }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loading = useSelector((s) => s.bookings.loading);
@@ -71,6 +63,15 @@ const BookingDialog = ({ open, setOpen, photos, ...roomInfo }) => {
   const [price, setPrice] = React.useState(roomInfo?.price);
   const [paymentOpen, setPaymentOpen] = React.useState(false)
   const [bookingId, setBookingId] = React.useState('')
+  const initialValues = {
+    name: "",
+    phoneNumber: "",
+    email: "",
+    address: "",
+    maxPeople: "",
+    checkInDate,
+    checkOutDate,
+  };
 
   const formik = useFormik({
     initialValues,

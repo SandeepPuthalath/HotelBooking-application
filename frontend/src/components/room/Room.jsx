@@ -13,7 +13,7 @@ import PaymentDialog from "../booking/PaymentDialog";
 
 export default function Room(props) {
   const [open, setOpen] = React.useState(false)
-  const {_id, title, price, maxPeople, desc, photos } = props
+  const {_id, title, price, maxPeople, desc, photos, checkInDate, checkOutDate } = props
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function Room(props) {
           </Button>
         </CardFooter>
       </Card>
-      <BookingDialog open={open} {...props} setOpen={setOpen}/>
+      <BookingDialog open={open} {...props} setOpen={setOpen} checkInDate={checkInDate} checkOutDate={checkOutDate}/>
       <PaymentDialog/>
     </>
   );

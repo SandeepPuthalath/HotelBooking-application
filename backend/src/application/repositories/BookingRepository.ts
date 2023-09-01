@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { BookingEntityInterface } from "../../entities/booking";
 import { BookingRepositoryDbType } from "../../frameworks/database/mongoDB/repositories/BookingRepositoryDb";
 
@@ -19,7 +19,7 @@ export default function bookingRepository(
   const updateBooking = async (bookingId: string, updates: any) =>
     await repository.updateBooking(bookingId, updates);
 
-  const getAllBookingsOfUser = async (userId:string) => await repository.getAllBookingsOfUser(userId);
+  const getAllBookingsOfUser = async (userId:string, page: number, limit: number) => await repository.getAllBookingsOfUser(userId, page, limit);
 
   const getAllBookingOfHotel =async (hotelId:string, page: number, limit: number) => await repository.getAllBookingOfHotel(hotelId, page, limit);
 
@@ -31,7 +31,9 @@ export default function bookingRepository(
 
   const getTotalBookings = async (hotelId: mongoose.Types.ObjectId) => await repository.getTotalBookings(hotelId);
 
-  const changePaymentStatus = async (id: mongoose.Types.ObjectId | string, paymentMethod: string) => await repository.changePaymentStatus(id, paymentMethod)
+  const changePaymentStatus = async (id: mongoose.Types.ObjectId | string, paymentMethod: string) => await repository.changePaymentStatus(id, paymentMethod);
+
+  const getBookingDetailsOfUser = async (id: mongoose.Types.ObjectId) => await repository.getBookingDetailsOfUser(id);
 
   return {
     createBooking,
@@ -46,6 +48,7 @@ export default function bookingRepository(
     getYearlyRevenu,
     getTotalBookings,
     changePaymentStatus,
+    getBookingDetailsOfUser
   };
 }
 

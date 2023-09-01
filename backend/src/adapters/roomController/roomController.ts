@@ -11,6 +11,7 @@ import getAllRoooms from "../../application/user-cases/room/getAllRooms";
 import getRoomDetails from "../../application/user-cases/room/getRoomDetails";
 import addImage from "../../application/user-cases/room/addImage";
 import searchRoom from "../../application/user-cases/room/searchRoom";
+import updateRoom from "../../application/user-cases/room/updateRoom";
 
 export default function roomController(
   roomRepository: RoomRepositoryInterface,
@@ -101,11 +102,26 @@ export default function roomController(
 
       console.log(data);
 
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "search result has been fetched",
+        data: data,
+      });
+    }
+  );
+
+  const handleUpdateRoomDetails = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { id } = req.params;
+      const updates = req.body;
+      console.log(updates)
+      const data = await updateRoom(id, updates, repositoryRoom);
+
       res
         .status(HttpStatus.OK)
         .json({
           status: "success",
-          message: "search result has been fetched",
+          message: "successfully updated room",
           data: data,
         });
     }
@@ -117,5 +133,6 @@ export default function roomController(
     handleGetRoomDetails,
     handleAddRoomImage,
     handleSearchRoom,
+    handleUpdateRoomDetails,
   };
 }

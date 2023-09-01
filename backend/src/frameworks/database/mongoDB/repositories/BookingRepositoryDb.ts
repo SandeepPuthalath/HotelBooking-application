@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import booking, { BookingEntityInterface } from "../../../../entities/booking";
 import Booking from "../models/bookingModel";
 
@@ -42,10 +42,94 @@ export default function bookingRepositoryDb() {
       }
     );
 
-  const getAllBookingsOfUser = async (userId: string) => {
-    const bookings = await Booking.aggregate([
+  const getAllBookingsOfUser = async (
+    userId: string,
+    page: number,
+    limit: number
+  ) => {
+    const bookings = await Booking.find({ userId });
+    const startIndex = (page - 1) * limit;
+    const lastIndex = page * limit;
+    const results: any = {};
+    results.totalBookings = bookings.length;
+    results.pageCount = Math.ceil(bookings.length / limit);
+
+    if (lastIndex < bookings.length) {
+      results.next = {
+        page: page + 1,
+      };
+    }
+
+    if (startIndex > 0) {
+      results.prev = {
+        page: page - 1,
+      };
+    }
+
+    results.results = bookings.slice(startIndex, lastIndex);
+
+    return results;
+    // const bookings = await Booking.aggregate([
+    //   {
+    //     $match: { userId: new mongoose.Types.ObjectId(userId) },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "hotels", // Collection name for the Hotel model
+    //       localField: "hotelId",
+    //       foreignField: "_id",
+    //       as: "hotelInfo",
+    //     },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "rooms", // Collection name for the Room model
+    //       localField: "roomId",
+    //       foreignField: "_id",
+    //       as: "roomInfo",
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$hotelInfo",
+    //   },
+    //   {
+    //     $unwind: "$roomInfo",
+    //   },
+    //   {
+    //     $project: {
+    //       name: 1,
+    //       phoneNumber: 1,
+    //       email: 1,
+    //       address: 1,
+    //       maxPeople: 1,
+    //       checkInDate: 1,
+    //       checkOutDate: 1,
+    //       price: 1,
+    //       status: 1,
+    //       hotelInfo: {
+    //         _id: 1,
+    //         name: 1,
+    //         destination: 1,
+    //         address: 1,
+    //         // Include other hotel fields you want
+    //       },
+    //       roomInfo: {
+    //         _id: 1,
+    //         title: 1,
+    //         // Include other room fields you want
+    //       },
+    //       createdAt: 1,
+    //       updatedAt: 1,
+    //     },
+    //   },
+    // ]);
+    return bookings;
+  };
+
+  const getBookingDetailsOfUser = async (id :mongoose.Types.ObjectId) =>{
+    const booking = await Booking.aggregate([
       {
-        $match: { userId: new mongoose.Types.ObjectId(userId) },
+        $match: { _id: id },
       },
       {
         $lookup: {
@@ -96,9 +180,10 @@ export default function bookingRepositoryDb() {
           updatedAt: 1,
         },
       },
-    ]);
-    return bookings;
-  };
+    ])
+    console.log(booking)
+    return booking
+  }
 
   const getAllBookingOfHotel = async (
     hotelId: string,
@@ -110,7 +195,7 @@ export default function bookingRepositoryDb() {
     const lastIndex = page * limit;
     const results: any = {};
     results.totalBookings = hotels.length;
-    results.pageCount = Math.ceil(hotels.length/limit);
+    results.pageCount = Math.ceil(hotels.length / limit);
 
     if (lastIndex < hotels.length) {
       results.next = {
@@ -125,7 +210,7 @@ export default function bookingRepositoryDb() {
     }
 
     results.results = hotels.slice(startIndex, lastIndex);
-    
+
     return results;
   };
 
@@ -219,6 +304,7 @@ export default function bookingRepositoryDb() {
     getYearlyRevenu,
     getTotalBookings,
     changePaymentStatus,
+    getBookingDetailsOfUser,
   };
 }
 

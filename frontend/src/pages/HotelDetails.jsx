@@ -170,7 +170,12 @@ const HotelDetails = () => {
           <div className="md:col-span-4 px-5 py-5">
             <div className="flex flex-col gap-5">
               {rooms?.map((room) => (
-                <Room key={room?._id} {...room} />
+                <Room
+                  key={room?._id}
+                  {...room}
+                  checkInDate={formik.values.checkInDate}
+                  checkOutDate={formik.values.checkOutDate}
+                />
               ))}
             </div>
           </div>

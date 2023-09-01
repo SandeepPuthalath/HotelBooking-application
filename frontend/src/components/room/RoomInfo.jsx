@@ -8,43 +8,37 @@ import {
 } from "@material-tailwind/react";
 import { useFormik } from "formik";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
+import { handleEditRoomDetails } from "../../redux/reducers/room/roomDetailsSlice";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   price: Yup.number().required("Price is required"),
-  type: Yup.string().required("Room Type is required"),
   maxPeople: Yup.number().required("Max people is required"),
   desc: Yup.string().required("Description is required"),
 });
 
-const options = [
-  { value: "single", text: "Single Rooms" },
-  { value: "double", text: "Double Rooms" },
-  { value: "twin", text: "Twin Rooms" },
-];
 
-const RoomInfo = ({ title, price, type, maxPeople, desc }) => {
-
+const RoomInfo = ({ _id, title, price, type, maxPeople, desc }) => {
+    
+    const dispatch = useDispatch()
     const [edit, setEdit] = React.useState(true);
-
     const handleEdit = () => setEdit(s => !s)
 
   const formik = useFormik({
     initialValues: {
       title: title,
       price: price,
-      type: type,
       maxPeople: maxPeople,
       desc: desc,
     },
     validationSchema,
     onSubmit: (payloads, { setSubmitting, setErrors }) => {
       try {
-        console.log(payloads);
-        // dispatch(handleAddRoom({ hotelId, roomData: payloads }));
-        // toast.success("Room added successfull");
+        console.log(payloads)
+        dispatch(handleEditRoomDetails({_id, body:payloads}))
       } catch (error) {
         toast.error("Somthing went wrong");
       }
@@ -74,26 +68,6 @@ const RoomInfo = ({ title, price, type, maxPeople, desc }) => {
       {formik.touched.price && formik.errors.price && (
         <Typography variant="small" color="red">
           {formik.errors.price}
-        </Typography>
-      )}
-      <Select
-        onChange={(e) => {
-          formik.setFieldValue("type", e);
-        }}
-        error={formik.touched.type && Boolean(formik.errors.type)}
-        variant="standard"
-        label="Room Type"
-        disabled={edit}
-      >
-        {options.map((option) => (
-          <Option key={option.value} value={option.value}>
-            {option.text}
-          </Option>
-        ))}
-      </Select>
-      {formik.touched.type && formik.errors.type && (
-        <Typography variant="small" color="red">
-          {formik.errors.type}
         </Typography>
       )}
 

@@ -13,9 +13,9 @@ export const handleBookingRoom = createAsyncThunk("room/booking", async (payload
     }
 })
 
-export const handlePayment = createAsyncThunk("payment", async ({paymentMethod, bookingId}) => {
+export const handlePayment = createAsyncThunk("payment", async ({ paymentMethod, bookingId }) => {
     try {
-        const response = await instance.put(`/booking/?id=${bookingId}`, {paymentMethod})
+        const response = await instance.put(`/booking/?id=${bookingId}`, { paymentMethod })
 
         return response.data;
     }
@@ -25,10 +25,10 @@ export const handlePayment = createAsyncThunk("payment", async ({paymentMethod, 
 })
 
 export const handleGetUsersAllBookings = createAsyncThunk("booking/all", async (payload) => {
-
+    const { page, userId } = payload
     try {
 
-        const response = await bookingApi.get(`/${payload}`);
+        const response = await bookingApi.get(`/${userId}?page=${page}&limit=${5}`);
 
         return response.data
 
@@ -49,10 +49,20 @@ export const handleCancelBooking = createAsyncThunk("booking/cancel", async (pay
     }
 })
 
+export const handleGettingBookingDetails = createAsyncThunk("bookingDetails", async (id) => {
+    try {
+        const response = await instance.get(`booking/details/${id}`);
+        return response.data
+    } catch (error) {
+        Promise.reject(error)
+    }
+})
+
 const initialState = {
     loading: false,
     bookings: [],
     booking: null,
+    bookingDetails: null,
     message: "",
     error: null
 }
@@ -66,6 +76,7 @@ const bookingSlice = createSlice({
             state.loading = false
             state.bookings = []
             state.booking = null
+            state.bookingDetails = null
             state.message = ""
             state.error = null
         }
@@ -118,6 +129,18 @@ const bookingSlice = createSlice({
                 state.message = action.payload?.message
             })
             .addCase(handlePayment.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message;
+            })
+            .addCase(handleGettingBookingDetails.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(handleGettingBookingDetails.fulfilled, (state, action) => {
+                state.loading = false
+                state.bookingDetails = action.payload?.bookingDetails
+            })
+            .addCase(handleGettingBookingDetails.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.error.message;
             })

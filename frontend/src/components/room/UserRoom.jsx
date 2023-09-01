@@ -7,7 +7,8 @@ import RoomImageView from "./RoomImageView";
 import { resetError } from "../../redux/reducers/room/roomsSlice";
 import RoomInfo from "./RoomInfo";
 import { FaTrash } from "react-icons/fa";
-import { AlertMessage } from "../alerts/AlertMessage";
+import Swal from "sweetalert2";
+import Loading from "../auth/Loading";
 
 const UserRoom = ({ hotelId }) => {
   const loading = useSelector((s) => s.roomDetails.loading);
@@ -15,21 +16,22 @@ const UserRoom = ({ hotelId }) => {
   const error = useSelector((s) => s.roomDetails.error);
   const dispatch = useDispatch();
   const { roomId } = useParams((s) => s?.roomId);
-  const [open, setOpen] = useState(false);
-  const [isDelete, setIsDelete] = useState(false);
 
-  const handleOpen = () => {
-    setOpen((s) => !s);
-  };
 
-  const handleIsDeleting = (status) => {
-    setIsDelete(status);
-  };
 
   const handleDelete = () => {
-    if (!isDelete) {
-      return;
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
   };
 
   React.useEffect(() => {
@@ -38,7 +40,7 @@ const UserRoom = ({ hotelId }) => {
   }, []);
 
   if (loading) {
-    return <h1>Loading.......</h1>;
+    return <Loading/>;
   }
 
   if (error) {
@@ -49,29 +51,29 @@ const UserRoom = ({ hotelId }) => {
     <>
       <div className="relative flex py-4 justify-center items-center shadow">
         <div
-          onClick={() => {
-            handleOpen();
-            handleDelete();
-          }}
+          onClick={handleDelete}
           className="absolute right-10 cursor-pointer"
         >
           <FaTrash size={30} color="red" />
         </div>
         <Typography variant="h3">Room Details</Typography>
       </div>
-      <div className="flex items-center justify-center my-5 gap-2">
-        <div className="flex flex-col w-1/2 items-center justify-center">
-          <RoomImageView
-            photos={roomData?.photos}
-            roomId={roomData?._id}
-            hotelId={hotelId}
-          />
+      <div className="grid md:grid-cols-2 my-5 gap-2">
+        <div className="md:col-span-1">
+          <div className="flex flex-col items-center justify-center">
+            <RoomImageView
+              photos={roomData?.photos}
+              roomId={roomData?._id}
+              hotelId={hotelId}
+            />
+          </div>
         </div>
-        <div className="w-1/2 flex justify-center items-center">
-          <RoomInfo {...roomData} />
+        <div className="md:col-span-1">
+          <div className="flex justify-center items-center">
+            <RoomInfo {...roomData} />
+          </div>
         </div>
       </div>
-      <AlertMessage open={open} onClose={handleOpen} hotelId={hotelId} roomId={roomId}/>
     </>
   );
 };

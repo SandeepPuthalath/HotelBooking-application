@@ -10,7 +10,7 @@ const BannerList = lazy(() =>
 );
 const BannerDetails = React.lazy(() => import("../../components/admin/banner/BannerDetails"))
 const AdminBannerManagement = lazy(() =>
-  import("../../pages/auth/AdminBannerManagement")
+  import("../../pages/AdminBannerManagement")
 );
 const AdminDestinationPage = lazy(() =>
   import("../../pages/AdminDestinationPage")

@@ -30,6 +30,8 @@ const bookingRouter = () => {
 
   router.route("/:bookingId").patch(controller.handleCancelBooking);
 
+  router.route("/details/:id").get(controller.handleGetBookingDetailsOfUser)
+
   router.get("/owner/:hotelId", controller.handleGettingAllBookingOfHotel);
 
   router.get('/hotel/performance', controller.handleFetchingHotelPerformance);

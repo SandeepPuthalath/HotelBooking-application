@@ -21,13 +21,13 @@ export default async function addRoom(
     throw new AppError("Your account is not registerd with any Hotel", HttpStatus.BAD_REQUEST);
   }
 
-  const { title, price, type, maxPeople, desc, photos } = room;
+  const { title, price, maxPeople, desc, photos } = room;
 
   if (!title || !price || !maxPeople || !desc) {
     throw new AppError("Please fill all the fields", HttpStatus.NOT_ACCEPTABLE);
   }
 
-  const newRoom = createRoomEntity(hotelId, title, price, type, maxPeople, desc, photos);
+  const newRoom = createRoomEntity(hotelId, title, price, maxPeople, desc, photos);
 
   const data = await roomRepository.createRoom(newRoom);
 
