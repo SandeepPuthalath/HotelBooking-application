@@ -69,64 +69,9 @@ export default function bookingRepositoryDb() {
     results.results = bookings.slice(startIndex, lastIndex);
 
     return results;
-    // const bookings = await Booking.aggregate([
-    //   {
-    //     $match: { userId: new mongoose.Types.ObjectId(userId) },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "hotels", // Collection name for the Hotel model
-    //       localField: "hotelId",
-    //       foreignField: "_id",
-    //       as: "hotelInfo",
-    //     },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "rooms", // Collection name for the Room model
-    //       localField: "roomId",
-    //       foreignField: "_id",
-    //       as: "roomInfo",
-    //     },
-    //   },
-    //   {
-    //     $unwind: "$hotelInfo",
-    //   },
-    //   {
-    //     $unwind: "$roomInfo",
-    //   },
-    //   {
-    //     $project: {
-    //       name: 1,
-    //       phoneNumber: 1,
-    //       email: 1,
-    //       address: 1,
-    //       maxPeople: 1,
-    //       checkInDate: 1,
-    //       checkOutDate: 1,
-    //       price: 1,
-    //       status: 1,
-    //       hotelInfo: {
-    //         _id: 1,
-    //         name: 1,
-    //         destination: 1,
-    //         address: 1,
-    //         // Include other hotel fields you want
-    //       },
-    //       roomInfo: {
-    //         _id: 1,
-    //         title: 1,
-    //         // Include other room fields you want
-    //       },
-    //       createdAt: 1,
-    //       updatedAt: 1,
-    //     },
-    //   },
-    // ]);
-    return bookings;
   };
 
-  const getBookingDetailsOfUser = async (id :mongoose.Types.ObjectId) =>{
+  const getBookingDetailsOfUser = async (id: mongoose.Types.ObjectId) => {
     const booking = await Booking.aggregate([
       {
         $match: { _id: id },
@@ -180,10 +125,10 @@ export default function bookingRepositoryDb() {
           updatedAt: 1,
         },
       },
-    ])
-    console.log(booking)
-    return booking
-  }
+    ]);
+    console.log(booking);
+    return booking;
+  };
 
   const getAllBookingOfHotel = async (
     hotelId: string,
@@ -291,6 +236,88 @@ export default function bookingRepositoryDb() {
     return booking;
   };
 
+  const getWeeklyBookings = async (id: mongoose.Types.ObjectId) => {
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const weeklySales = await Booking.aggregate([
+      {
+        $match: { hotelId: id },
+      },
+      {
+        $project: {
+          dayOfWeek: { $dayOfWeek: "$createdAt" }, // Extract the day of the week (1-7) from the createdAt field
+          totalAmount: "$price", // Use your price field as the total amount
+        },
+      },
+      {
+        $project: {
+          dayOfWeek: 1, // Preserve the original dayOfWeek value
+          dayName: {
+            $let: {
+              vars: {
+                daysOfWeek: [
+                  "Sunday",
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                ],
+              },
+              in: {
+                $arrayElemAt: [
+                  "$$daysOfWeek",
+                  { $subtract: ["$dayOfWeek", 1] },
+                ], // Map day of week to day name
+              },
+            },
+          },
+          totalAmount: 1, // Preserve the totalAmount value
+        },
+      },
+      {
+        $group: {
+          _id: "$dayName", // Group by the day name
+          dayOrder: { $first: "$dayOfWeek" }, // Preserve the numeric day of the week for sorting
+          totalBookings: { $sum: 1 }, // Count the number of bookings in each group
+          totalAmount: { $sum: "$totalAmount" }, // Calculate the total amount in each group
+        },
+      },
+      {
+        $sort: { dayOrder: 1 }, // Sort by the numeric day of the week
+      },
+    ]);
+
+    const resultMap = new Map();
+
+    // Initialize the map with default values for all days of the week
+    for (const day of daysOfWeek) {
+      resultMap.set(day, {
+        _id: day,
+        dayOrder: daysOfWeek.indexOf(day),
+        totalBookings: 0,
+        totalAmount: 0,
+      });
+    }
+
+    // Update the map with actual values from the aggregation result
+    for (const entry of weeklySales) {
+      resultMap.set(entry._id, entry);
+    }
+
+    // Convert the map to an array of values
+    const finalResult = Array.from(resultMap.values());
+    return finalResult;
+  };
+
   return {
     createBooking,
     getAllBooking,
@@ -305,6 +332,7 @@ export default function bookingRepositoryDb() {
     getTotalBookings,
     changePaymentStatus,
     getBookingDetailsOfUser,
+    getWeeklyBookings,
   };
 }
 

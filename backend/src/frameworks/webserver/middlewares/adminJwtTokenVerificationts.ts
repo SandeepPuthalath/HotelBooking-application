@@ -8,7 +8,7 @@ import { authServiceInterface } from '../../../application/services/authServiceI
 const authServiceMiddleware = authServiceInterface(authService());
 
 
-export default function adminJwtTokenVerification(
+export default async function adminJwtTokenVerification(
     req: Request,
     res: Response,
     next: NextFunction
@@ -16,12 +16,12 @@ export default function adminJwtTokenVerification(
     let token: string | null = '';
     if (
       req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
+      req.headers.authorization.startsWith("Bearer")
     ) {
-      token = req.headers.authorization.split(' ')[1];
+      token = req.headers.authorization.split(" ")[1];
     }
-    if (!token){
-      throw new AppError('Token not found', HttpStatus.UNAUTHORIZED);
+    if (!token) {
+      throw new AppError("Token not found", HttpStatus.UNAUTHORIZED);
     }
     try {
       const { payload }: any = authServiceMiddleware.verifyAdmin(token);

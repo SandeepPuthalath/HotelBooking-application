@@ -12,11 +12,13 @@ export default function destinationRespository(
 
   const getFeaturedDestinations = async (count: number) => await repository.getFeaturedDestinations(count);
 
+  const isDestinationNameExists = async (name:string) => await repository.isDestinationNameExists(name);
 
   return {
     addDestination,
     getAllDestinations,
     getFeaturedDestinations,
+    isDestinationNameExists,
   }
 }
 

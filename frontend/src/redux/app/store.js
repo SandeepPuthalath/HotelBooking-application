@@ -20,6 +20,8 @@ import ownerDashboardReducer from "../reducers/owner/ownerDashboardReducer";
 import AdminBannerReducer from "../reducers/admin/AdminBannerReducer";
 import bannerReducer from "../reducers/banner/bannerReducer";
 import reviewReducer from "../reducers/user/reviewReducer";
+import chartsReducer from "../reducers/owner/chartsReducer";
+import userChatReducer from "../reducers/chats/userChatReducer";
 
 
 const loadState = () => {
@@ -69,6 +71,8 @@ const store = configureStore({
         adminBanner: AdminBannerReducer,
         banner: bannerReducer,
         review: reviewReducer,
+        charts:chartsReducer,
+        userChat:userChatReducer,
         
     },
     preloadedState:persistedState

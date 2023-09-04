@@ -7,12 +7,17 @@ import jwtDecode from "jwt-decode";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BookingLayout  = React.lazy(() => import("../../components/booking/BookingLayout"))
+const HelpDesk = React.lazy(() => import("../../pages/HelpDesk"));
+const BookingLayout = React.lazy(() =>
+  import("../../components/booking/BookingLayout")
+);
 const BookingSuccess = React.lazy(() =>
   import("../../components/booking/BooingSuccess")
 );
 const BookingsPage = React.lazy(() => import("../../pages/BookingsPage"));
-const BookingDetais =  React.lazy(() => import ("../../components/booking/BookingDetails"))
+const BookingDetais = React.lazy(() =>
+  import("../../components/booking/BookingDetails")
+);
 const Home = React.lazy(() => import("../../pages/Home"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const Hotels = lazy(() => import("../../pages/Hotels"));
@@ -65,19 +70,31 @@ export default function UserRouter() {
           }
         />
         <Route
+          path="/help-desk"
+          element={
+            token ? (
+              <Suspense>
+                <HelpDesk/>
+              </Suspense>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+        <Route
           path="bookings"
           element={
             token ? (
               <Suspense>
-                <BookingLayout/>
+                <BookingLayout />
               </Suspense>
             ) : (
               <Navigate to="/login" />
             )
           }
         >
-          <Route index={true} element={<BookingsPage/>}/>
-          <Route path=":id" element={<BookingDetais/>}/>
+          <Route index={true} element={<BookingsPage />} />
+          <Route path=":id" element={<BookingDetais />} />
         </Route>
         <Route
           path="success/:id"
@@ -91,6 +108,7 @@ export default function UserRouter() {
             )
           }
         />
+
         <Route path="*" element={<h1>404 page not found</h1>} />
       </Routes>
       <Footer />

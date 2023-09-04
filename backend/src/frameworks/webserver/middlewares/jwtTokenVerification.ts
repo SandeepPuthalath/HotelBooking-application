@@ -8,7 +8,7 @@ import { authServiceInterface } from '../../../application/services/authServiceI
 const authServiceMiddleware = authServiceInterface(authService());
 
 
-export default function jwtTokenVerification (
+export default async function jwtTokenVerification (
     req: Request,
     res: Response,
     next: NextFunction

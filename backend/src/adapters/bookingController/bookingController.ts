@@ -16,6 +16,7 @@ import { PaymentServiceInterface } from "../../application/services/paymentServi
 import { PaymentServicesType } from "../../frameworks/services/paymentServices";
 import payment from "../../application/user-cases/booking/payment";
 import fetchUserBooking from "../../application/user-cases/booking/fetchUserBooking";
+import getChartsData from "../../application/user-cases/booking/getChartsData";
 
 export default function bookingController(
   bookingRepoInt: BookingRepository,
@@ -23,7 +24,7 @@ export default function bookingController(
   roomRepoInt: RoomRepositoryInterface,
   roomRepoImp: RoomsRepositoryDbInterface,
   paymentInt: PaymentServiceInterface,
-  paymetnImp: PaymentServicesType,
+  paymetnImp: PaymentServicesType
 ) {
   const bookingRepo = bookingRepoInt(bookingRepoDbImp());
   const roomRepo = roomRepoInt(roomRepoImp());
@@ -47,14 +48,25 @@ export default function bookingController(
       console.log("in payment section");
 
       const { paymentMethod } = req.body;
-      const id : any= req.query.id
-      console.log(id, paymentMethod)
-      const data = await payment(id , paymentMethod, payments, bookingRepo, roomRepo);
+      const id: any = req.query.id;
+      console.log(id, paymentMethod);
+      const data = await payment(
+        id,
+        paymentMethod,
+        payments,
+        bookingRepo,
+        roomRepo
+      );
 
-      console.log(data)
+      console.log(data);
 
-      res.status(HttpStatus.OK).json({status: "success", message: "payment has been successfull", url: data?.url});
-
+      res
+        .status(HttpStatus.OK)
+        .json({
+          status: "success",
+          message: "payment has been successfull",
+          url: data?.url,
+        });
     }
   );
 
@@ -92,9 +104,14 @@ export default function bookingController(
       const { hotelId } = req.params;
       const page = parseInt(req.query?.page as string);
       const limit = parseInt(req.query?.limit as string);
-      console.log("pagination parameters",page, limit)
+      console.log("pagination parameters", page, limit);
 
-      const bookings = await fetchAllBookingsOfHotel(hotelId,page, limit, bookingRepo);
+      const bookings = await fetchAllBookingsOfHotel(
+        hotelId,
+        page,
+        limit,
+        bookingRepo
+      );
 
       res.status(HttpStatus.OK).json({
         status: "success",
@@ -149,16 +166,26 @@ export default function bookingController(
     }
   );
 
+  const handleGetBookingDetailsOfUser = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { id } = req.params;
+      const bookingDetails = await fetchUserBooking(id, bookingRepo);
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "Successfully fetched data",
+        bookingDetails: bookingDetails[0],
+      });
+    }
+  );
 
-  const handleGetBookingDetailsOfUser = expressAsyncHandler(async (req, res) =>{
-    const {id} = req.params
-    const bookingDetails = await fetchUserBooking(id, bookingRepo);
-    res.status(HttpStatus.OK).json({
-      status: "success",
-      message: "Successfully fetched data",
-      bookingDetails:bookingDetails[0]
-    })
-  })
+  const handleFetchingChartsDatas = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const { hotelId } = req.params;
+      console.log("charts", hotelId);
+      const data = await getChartsData(hotelId, bookingRepo);
+      res.status(HttpStatus.OK).json({status:"success", message:"successfully fetched data", ...data})
+    }
+  );
 
   return {
     handleBooking,
@@ -169,6 +196,7 @@ export default function bookingController(
     handleStatsuChange,
     handleFetchingHotelPerformance,
     handlePayment,
-    handleGetBookingDetailsOfUser
+    handleGetBookingDetailsOfUser,
+    handleFetchingChartsDatas,
   };
 }

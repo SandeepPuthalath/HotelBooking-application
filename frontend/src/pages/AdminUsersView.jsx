@@ -60,8 +60,6 @@ export default function AdminUsersView() {
     dispatch(fetchUsersData());
     setFilteredUsers(usersDatas);
 
-    return () => dispatch(resetStateUsers())
-
   }, [dispatch]);
 
   if (loading) {

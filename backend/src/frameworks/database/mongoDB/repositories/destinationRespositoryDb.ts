@@ -9,20 +9,25 @@ export default function destinationRespositoryDb() {
     });
 
     destination.save();
-    return destination
+    return destination;
   };
 
   const getAllDestinations = async () => await Destination.find();
 
-  const getFeaturedDestinations =async (count: number) => await Destination.find({featured: true}).limit(count);
+  const isDestinationNameExists = async (name: string) => {
+    const destinations = await Destination.find();
+    return destinations.find(destination => destination?.name?.toLowerCase() === name.toLowerCase())
+  };
 
+  const getFeaturedDestinations = async (count: number) =>
+    await Destination.find({ featured: true }).limit(count);
 
-  return{
+  return {
     addDestination,
     getAllDestinations,
-    getFeaturedDestinations
-  }
+    getFeaturedDestinations,
+    isDestinationNameExists,
+  };
 }
 
-
-export type DestinationRespositoryDbType = typeof destinationRespositoryDb
+export type DestinationRespositoryDbType = typeof destinationRespositoryDb;

@@ -13,6 +13,14 @@ export default async function addDestination(name: string, photo: string, destin
         throw new AppError("Some details are missing", HttpStatus.BAD_REQUEST);
     }
 
+    const isExists = await destinationResp.isDestinationNameExists(name);
+
+    console.log(isExists)
+
+    if(isExists){
+        throw new AppError("The destination already exists", HttpStatus.CONFLICT);
+    }
+
     const newDestination = destination(name, photo);
 
     const data = await destinationResp.addDestination(newDestination);

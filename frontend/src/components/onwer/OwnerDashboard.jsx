@@ -3,6 +3,7 @@ import { HiCurrencyRupee } from "react-icons/hi";
 import { FaBed } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPerformanceDetails } from "../../redux/reducers/owner/ownerDashboardReducer";
+import OwnerWeeklyChart from "../charts/owner/OwnerWeeklyChart";
 
 function getMonthName(monthNumber) {
   const months = [
@@ -24,7 +25,7 @@ const OwnerDashboard = ({hotelId}) => {
   const totalBookings = useSelector(s => s.ownerDashboard.totalBookings)
 
   React.useEffect(() =>{
-    dispatch(fetchPerformanceDetails(hotelId))
+    dispatch(fetchPerformanceDetails(hotelId));
   }, [])
 
   return (
@@ -63,6 +64,9 @@ const OwnerDashboard = ({hotelId}) => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="my-10">
+        <OwnerWeeklyChart hotelId={hotelId}/>
       </div>
     </div>
   );

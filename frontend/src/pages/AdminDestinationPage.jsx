@@ -58,10 +58,10 @@ const AdminDestinationPage = () => {
 
   return (
     <div>
-      <div className="bg-gray-200 flex flex-row justify-center items-center m-10 shadow-md rounded-md">
-        <div className="grid grid-cols-3">
-          <div className="col-span-1">
-            <div className="m-2 flex flex-col gap-2"> 
+      <div className="bg-white flex flex-row justify-center items-center shadow-md ">
+        <div className="grid md:grid-cols-3">
+          <div className="md:col-span-1">
+            <div className="flex flex-col gap-2"> 
               <div className="m-2">
                 <Typography variant="h5">Add destination</Typography>
               </div>
@@ -130,7 +130,7 @@ const AdminDestinationPage = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-2">
+          <div className="md:col-span-2">
             <DestinationTable />
           </div>
         </div>

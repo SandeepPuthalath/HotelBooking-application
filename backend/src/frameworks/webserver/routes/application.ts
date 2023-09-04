@@ -31,10 +31,9 @@ const applicationRoute = () => {
 
   router
     .route("/")
-    .get(adminJwtTokenVerification, controller.handlefetchAllApplications)
-    .post()
-    .put()
-    .delete();
+    .get(
+      adminJwtTokenVerification, 
+      controller.handlefetchAllApplications)
 
   return router;
 };

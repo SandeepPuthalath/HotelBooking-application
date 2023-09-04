@@ -52,9 +52,10 @@ export const authService = () => {
   };
 
 
-  const verifyAdmin = async (token: string) =>{
+  const verifyAdmin = (token: string) =>{
     const decode: any = jwtDecode(token)
-    if(!decode?.admin){
+    const result = JSON.parse(decode?.payload)
+    if(!result?.admin){
       return false
     }
     return jwt.verify(token, configKeys.JWT_SECRET);

@@ -16,7 +16,7 @@ const bookingRouter = () => {
     roomRepository,
     roomsRepositoryDb,
     paymentServicesInterface,
-    paymentServices,
+    paymentServices
   );
 
   router
@@ -30,12 +30,15 @@ const bookingRouter = () => {
 
   router.route("/:bookingId").patch(controller.handleCancelBooking);
 
-  router.route("/details/:id").get(controller.handleGetBookingDetailsOfUser)
+  router.route("/details/:id").get(controller.handleGetBookingDetailsOfUser);
 
   router.get("/owner/:hotelId", controller.handleGettingAllBookingOfHotel);
 
-  router.get('/hotel/performance', controller.handleFetchingHotelPerformance);
+  router.get("/hotel/performance", controller.handleFetchingHotelPerformance);
 
+  router
+    .route("/chart/:hotelId")
+    .get(controller.handleFetchingChartsDatas);
 
   return router;
 };

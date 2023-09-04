@@ -35,6 +35,8 @@ export default function bookingRepository(
 
   const getBookingDetailsOfUser = async (id: mongoose.Types.ObjectId) => await repository.getBookingDetailsOfUser(id);
 
+  const getWeeklyBookings = async (id: mongoose.Types. ObjectId) => await repository.getWeeklyBookings(id)
+
   return {
     createBooking,
     getAllBooking,
@@ -48,7 +50,8 @@ export default function bookingRepository(
     getYearlyRevenu,
     getTotalBookings,
     changePaymentStatus,
-    getBookingDetailsOfUser
+    getBookingDetailsOfUser,
+    getWeeklyBookings,
   };
 }
 

@@ -16,7 +16,7 @@ export default function applicationRepositoryDb() {
     return newApplication.save();
   };
 
-  const fetchAll = async () => await Application.find({});
+  const fetchAll = async () => await Application.find();
 
   const fetchApplication = async (applicationId: string) => await Application.findById(applicationId);
 

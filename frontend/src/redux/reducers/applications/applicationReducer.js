@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import applicationApi from "../../api/applicationApi";
+import { instance } from "../../api/instance";
 
 
 export const handleRoleChangeApplication = createAsyncThunk("application/role-change", async (payload) => {
     try {
 
-        const response = await applicationApi.post("/role-change-application", payload);
+        const response = await instance.post("/application/role-change-application", payload);
 
         return response.data
 
