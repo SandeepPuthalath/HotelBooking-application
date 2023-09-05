@@ -17,6 +17,11 @@ import { PaymentServicesType } from "../../frameworks/services/paymentServices";
 import payment from "../../application/user-cases/booking/payment";
 import fetchUserBooking from "../../application/user-cases/booking/fetchUserBooking";
 import getChartsData from "../../application/user-cases/booking/getChartsData";
+import addMoney from "../../application/user-cases/wallet/addMoney";
+import { WalletRepositoryType } from "../../application/repositories/walletRepository";
+import { WalletRepositoryDbType } from "../../frameworks/database/mongoDB/repositories/walletRepositoryDB";
+import { TransactionRepository } from "../../application/repositories/transactionRepository";
+import { TransactionRepositoryDBType } from "../../frameworks/database/mongoDB/repositories/transactionRepositoryDB";
 
 export default function bookingController(
   bookingRepoInt: BookingRepository,
@@ -24,11 +29,17 @@ export default function bookingController(
   roomRepoInt: RoomRepositoryInterface,
   roomRepoImp: RoomsRepositoryDbInterface,
   paymentInt: PaymentServiceInterface,
-  paymetnImp: PaymentServicesType
+  paymetnImp: PaymentServicesType,
+  walletInt:WalletRepositoryType,
+  walletImp:WalletRepositoryDbType,
+  transactionInt: TransactionRepository,
+  transactionImp: TransactionRepositoryDBType
 ) {
   const bookingRepo = bookingRepoInt(bookingRepoDbImp());
   const roomRepo = roomRepoInt(roomRepoImp());
   const payments = paymentInt(paymetnImp());
+  const walletRepo = walletInt(walletImp());
+  const transRepo = transactionInt(transactionImp())
 
   const handleBooking = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -89,8 +100,13 @@ export default function bookingController(
   const handleCancelBooking = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const { bookingId } = req.params;
+      const userId = req.query?.userId as string
 
-      const data = await cancdelBooking(bookingId, bookingRepo);
+      const data: any = await cancdelBooking(bookingId, bookingRepo);
+
+      if(userId){
+        const result = await addMoney(userId, data?.price, walletRepo, transRepo);
+      }
 
       res.status(HttpStatus.OK).json({
         status: "success",

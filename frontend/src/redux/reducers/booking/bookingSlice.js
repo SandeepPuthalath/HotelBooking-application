@@ -38,9 +38,9 @@ export const handleGetUsersAllBookings = createAsyncThunk("booking/all", async (
     }
 })
 
-export const handleCancelBooking = createAsyncThunk("booking/cancel", async (payload) => {
+export const handleCancelBooking = createAsyncThunk("booking/cancel", async ({bookingId, userId}) => {
     try {
-        const response = await bookingApi.patch(`/${payload}`);
+        const response = await bookingApi.patch(`/${bookingId}?userId=${userId}`);
 
         return response.data
 

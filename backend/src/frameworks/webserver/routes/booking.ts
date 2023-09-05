@@ -6,6 +6,10 @@ import roomRepository from "../../../application/repositories/roomRepository";
 import roomsRepositoryDb from "../../database/mongoDB/repositories/roomsRepositoryDb";
 import paymentServices from "../../services/paymentServices";
 import paymentServicesInterface from "../../../application/services/paymentServiceInterface";
+import walletRepository from "../../../application/repositories/walletRepository";
+import walletRepositoryDB from "../../database/mongoDB/repositories/walletRepositoryDB";
+import transactionRepository from "../../../application/repositories/transactionRepository";
+import transactionRepositoryDB from "../../database/mongoDB/repositories/transactionRepositoryDB";
 
 const bookingRouter = () => {
   const router = express.Router();
@@ -16,7 +20,11 @@ const bookingRouter = () => {
     roomRepository,
     roomsRepositoryDb,
     paymentServicesInterface,
-    paymentServices
+    paymentServices,
+    walletRepository,
+    walletRepositoryDB,
+    transactionRepository,
+    transactionRepositoryDB,
   );
 
   router

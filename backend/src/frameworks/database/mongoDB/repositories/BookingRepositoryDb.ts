@@ -32,7 +32,7 @@ export default function bookingRepositoryDb() {
   const getBooking = async (id: string) => await Booking.findById(id);
 
   const deleteBooking = async (id: string) =>
-    await Booking.updateOne({ _id: id }, { $set: { status: "cancelled" } });
+    await Booking.findByIdAndUpdate(id, { $set: { status: "cancelled" } },{new:true});
 
   const updateBooking = async (id: string, updates: any) =>
     await Booking.updateOne(

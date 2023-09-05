@@ -22,6 +22,7 @@ import bannerReducer from "../reducers/banner/bannerReducer";
 import reviewReducer from "../reducers/user/reviewReducer";
 import chartsReducer from "../reducers/owner/chartsReducer";
 import userChatReducer from "../reducers/chats/userChatReducer";
+import walletReducer from "../reducers/wallet/walletReducer";
 
 
 const loadState = () => {
@@ -73,6 +74,7 @@ const store = configureStore({
         review: reviewReducer,
         charts:chartsReducer,
         userChat:userChatReducer,
+        userWallet: walletReducer
         
     },
     preloadedState:persistedState

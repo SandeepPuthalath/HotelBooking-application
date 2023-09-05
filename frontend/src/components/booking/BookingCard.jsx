@@ -1,12 +1,13 @@
 import React from "react";
 import { MdLocationPin } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { handleCancelBooking } from "../../redux/reducers/booking/bookingSlice";
 import { Button } from "@material-tailwind/react";
 
 const BookingCard = (probs) => {
   const dispatch = useDispatch();
+  const userId = useSelector((s) => s.user?.data?.applicantId);
   const {
     _id,
     name,
@@ -35,7 +36,7 @@ const BookingCard = (probs) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        dispatch(handleCancelBooking(_id)).then((response) => {
+        dispatch(handleCancelBooking({bookingId,userId})).then((response) => {
           if(response?.error){
               return Swal.fire("Error!", "Somthing went wrong", "error");
           }

@@ -46,6 +46,16 @@ const UserNav = () => {
           Booking
         </Link>
       </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <Link to="/help-desk" className="flex items-center">
+          Help desk
+        </Link>
+      </Typography>
     </ul>
   );
 };
@@ -192,7 +202,7 @@ export default function Header() {
               </Button>
             </>
           ) : (
-            <AccountMenu />
+            <AccountMenu role={userDetails?.role} />
           )}
         </Collapse>
       </Navbar>

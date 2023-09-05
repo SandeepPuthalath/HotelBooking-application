@@ -13,6 +13,7 @@ import bannerRouter from "./banner";
 import adminJwtTokenVerification from "../middlewares/adminJwtTokenVerificationts";
 import reviewRouter from "./review";
 import chatRouter from "./chats";
+import walletRouter from "./wallet";
 
 const routes = (app: Application) => {
   
@@ -28,6 +29,7 @@ const routes = (app: Application) => {
   app.use("/api/banner", bannerRouter());
   app.use('/api/review', reviewRouter());
   app.use("/api/chat", jwtTokenVerify, chatRouter());
+  app.use("/api/wallet", walletRouter())
 
 };
 

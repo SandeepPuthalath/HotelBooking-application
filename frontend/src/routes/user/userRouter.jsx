@@ -22,13 +22,15 @@ const Home = React.lazy(() => import("../../pages/Home"));
 const Profile = lazy(() => import("../../pages/Profile"));
 const Hotels = lazy(() => import("../../pages/Hotels"));
 const HotelDetails = lazy(() => import("../../pages/HotelDetails"));
+const Wallet = React.lazy(() => import("../../components/user/Wallet"))
+
 
 export default function UserRouter() {
   const state = useSelector((s) => s);
   const token = state.user?.data?.token;
   const decoded = token ? jwtDecode(token) : null;
   const userDetails = decoded ? JSON.parse(decoded?.payload) : null;
-  const hotelId = state.myHotel.data?._id;
+  // const hotelId = state.myHotel.data?._id;
 
   const owner = userDetails?.role === "business";
 
@@ -74,7 +76,7 @@ export default function UserRouter() {
           element={
             token ? (
               <Suspense>
-                <HelpDesk/>
+                <HelpDesk />
               </Suspense>
             ) : (
               <Navigate to="/login" />
@@ -108,7 +110,12 @@ export default function UserRouter() {
             )
           }
         />
-
+        <Route path="/wallet/:id" element={token?
+          <Suspense>
+            <Wallet/>
+          </Suspense>:
+          <Navigate to="/login"/>
+        } />
         <Route path="*" element={<h1>404 page not found</h1>} />
       </Routes>
       <Footer />

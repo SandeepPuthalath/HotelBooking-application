@@ -1,4 +1,5 @@
 import mongoose, { Schema, model } from 'mongoose';
+import Wallet from './walletModel';
 
 const userSchema = new Schema(
   {
