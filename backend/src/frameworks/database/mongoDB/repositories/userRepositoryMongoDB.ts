@@ -18,7 +18,7 @@ export const userRepositoryMongoDB = () => {
       lastName: user.getLastName(),
       email: user.getEmail(),
       phoneNumber: user.getPhoneNumber(),
-      password: user.getPassword()
+      password: user.getPassword(),
     });
     newUser.save();
     return newUser;
@@ -36,19 +36,33 @@ export const userRepositoryMongoDB = () => {
 
   const getUserById = async (id: string) => await User.findById(id);
 
-  const updateUserByProperty = async (id: string, updates:any) =>{
-    const user: CreateUserInterface | null= await User.findByIdAndUpdate(id, updates, {new: true})
-    return user
-  }
+  const updateUserByProperty = async (id: string, updates: any) => {
+    const user: CreateUserInterface | null = await User.findByIdAndUpdate(
+      id,
+      updates,
+      { new: true }
+    );
+    return user;
+  };
+
+  const changeProfileImg = async (id: string, url: string) =>
+    await User.findByIdAndUpdate(
+      id,
+      { $set: { pic: url } },
+      { upsert: true, new: true }
+    );
 
   const getAllUsers = async () => await User.find();
 
-  const changeUserRole = async (id:string, GSTNumber: string) => {
+  const changeUserRole = async (id: string, GSTNumber: string) => {
+    const data = await User.findByIdAndUpdate(
+      id,
+      { $set: { role: "business", GSTNumber: GSTNumber } },
+      { new: true }
+    );
 
-     const data = await User.findByIdAndUpdate(id, {$set:{role:"business", GSTNumber: GSTNumber}},{new: true});
-
-     return data;
-  }
+    return data;
+  };
 
   return {
     getUserByEmail,
@@ -57,8 +71,8 @@ export const userRepositoryMongoDB = () => {
     getUserById,
     updateUserByProperty,
     getAllUsers,
-    changeUserRole
-    
+    changeUserRole,
+    changeProfileImg,
   };
 };
 

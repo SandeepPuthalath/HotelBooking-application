@@ -57,3 +57,14 @@ export const changeUserRole = async (
   return user;
 };
 
+
+export const updateProfileImg = async (id:string, url: string, repository:ReturnType<UserDbInterface>) =>{
+
+  if(!id || !url){
+    throw new AppError("Somthing went wrong", HttpStatus.BAD_REQUEST);
+  }
+
+  return await repository.changeProfileImg(id, url);
+
+}
+

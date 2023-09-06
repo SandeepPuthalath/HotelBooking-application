@@ -11,14 +11,14 @@ export default function AdminNavbar() {
   return (
     <Navbar className="rounded-none w-full px-4 py-3">
       <div className="flex flex-wrap items-center justify-between gap-y-4 text-blue-gray-900">
-        <Typography
+        {/* <Typography
           as="a"
           href="#"
           variant="h6"
           className="mr-4 ml-2 cursor-pointer py-1.5"
         >
           Material Tailwind
-        </Typography>
+        </Typography> */}
         <div className="ml-auto flex gap-1 md:mr-4">
           <IconButton variant="text" color="blue-gray">
             <Cog6ToothIcon className="h-4 w-4" />
@@ -27,7 +27,7 @@ export default function AdminNavbar() {
             <BellIcon className="h-4 w-4" />
           </IconButton>
         </div>
-        <div className="relative flex w-full gap-2 md:w-max">
+        {/* <div className="relative flex w-full gap-2 md:w-max">
           <Input
             type="search"
             label="Type here..."
@@ -39,7 +39,7 @@ export default function AdminNavbar() {
           <Button size="sm" className="!absolute right-1 top-1 rounded">
             Search
           </Button>
-        </div>
+        </div> */}
       </div>
     </Navbar>
   );

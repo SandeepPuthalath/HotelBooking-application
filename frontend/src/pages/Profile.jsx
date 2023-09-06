@@ -9,11 +9,16 @@ import {
 import GSTDialog from "../components/user/GSTDialog";
 import ProfilePageSkeleton from "../components/Shimmers/ProfilePageSkeleton";
 import { IoAdd } from "react-icons/io5";
+import {handleImageUpload} from "../redux/reducers/imageUpload/imageUploadSlice"
+import { handleUpdateProfileImage } from "../redux/reducers/user/userSlice";
+import { Spinner } from "@material-tailwind/react";
 
 const ProfilePage = () => {
   const state = useSelector((state) => state);
   const name = state.userProfile?.data?.firstName
-  const applicantId = state?.user?.data?.applicantId;
+  const userId = state?.user?.data?.applicantId;
+  const uploading = useSelector(s => s.uploadImg.loading);
+  const loading = useSelector(s => s.userProfile?.loading);
   const [avatar, setAvatar] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [profileData, setProfileData] = useState(null);
@@ -25,7 +30,7 @@ const ProfilePage = () => {
     const fetchProfileData = async () => {
       try {
         // Simulating API call delay
-        const { payload } = await dispatch(getUserProfile(applicantId));
+        const { payload } = await dispatch(getUserProfile(userId));
         // Example response from the backend
         const response = {
           firstName: payload?.firstName,
@@ -34,7 +39,8 @@ const ProfilePage = () => {
           phoneNumber: payload?.phoneNumber,
           accountType: payload?.role,
         };
-
+        console.log(response)
+        setAvatar(payload?.pic)
         setProfileData(response);
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -47,6 +53,11 @@ const ProfilePage = () => {
   const handleUpload = (event) => {
     // File upload logic
     setAvatar(URL.createObjectURL(event.target.files[0]));
+    dispatch(handleImageUpload(event.target.files[0])).then((response) =>{
+      const {secure_url} = response.payload;
+      dispatch(handleUpdateProfileImage({userId, secure_url}))
+
+    });
   };
 
   const validationSchema = Yup.object().shape({
@@ -73,7 +84,7 @@ const ProfilePage = () => {
         email: values.email,
         phoneNumber: values.phoneNumber,
       };
-      dispatch(updateUserProfile({ applicantId, updates: updates }));
+      dispatch(updateUserProfile({ userId, updates: updates }));
     },
   });
 
@@ -99,14 +110,21 @@ const ProfilePage = () => {
         <div className="flex items-center justify-center mb-4">
           <div className="w-48 h-48 relative">
             <div
-              className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center overflow-hidden"
+              className="w-full h-full relative bg-gray-300 rounded-full flex items-center justify-center overflow-hidden"
               style={{
-                backgroundImage: `url(${avatar || "path-to-default-image"})`,
+                backgroundImage: `url(${
+                  avatar || profileData?.pic || "/defaults/blank-profile.png"
+                })`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
             >
-              {!avatar && (
+              {uploading && (
+                <div className="absolute bg-opacity-10 backdrop-filter backdrop-blur-sm w-full h-full flex justify-center items-center">
+                  <Spinner className="h-8 w-8" />
+                </div>
+              )}
+              {/* {!avatar && (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -121,7 +139,7 @@ const ProfilePage = () => {
                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
                 </svg>
-              )}
+              )} */}
             </div>
 
             <label
@@ -207,7 +225,12 @@ const ProfilePage = () => {
           </button>
         </form>
       </section>
-      <GSTDialog isOpen={isOpen} onClose={() => setIsOpen(false)} name={name} applicantId={applicantId}/>
+      <GSTDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        name={name}
+        applicantId={userId}
+      />
     </div>
   );
 };

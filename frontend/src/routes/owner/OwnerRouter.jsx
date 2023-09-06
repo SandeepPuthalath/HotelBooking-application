@@ -6,6 +6,8 @@ import { Suspense } from "react";
 const Header = React.lazy(() => import("../../components/Navbar/Header"));
 const Footer = React.lazy(() => import("../../components/footer/Footer"));
 const MyHotel = React.lazy(() => import("../../pages/MyHotel"));
+const Profile = React.lazy(() => import("../../pages/Profile"));
+
 const OnwerBookingPage = React.lazy(() =>
   import("../../pages/owner/OnwerBookingPage")
 );
@@ -47,11 +49,19 @@ const OwnerRouter = () => {
             element={
               token ? (
                 <Suspense>
-                  <OwnerDashboard hotelId={hotelId}/>
+                  <OwnerDashboard hotelId={hotelId} />
                 </Suspense>
               ) : (
                 <Navigate to="/" />
               )
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <Suspense>
+                <Profile />
+              </Suspense>
             }
           />
           <Route

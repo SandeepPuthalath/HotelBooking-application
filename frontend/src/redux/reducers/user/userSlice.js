@@ -1,5 +1,17 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getUserProfile, updateUserProfile } from "../thunks/userThunks";
+import { instance } from "../../api/instance";
+
+
+
+export const handleUpdateProfileImage = createAsyncThunk("updateProfileImage", async ({ userId, secure_url }) =>{
+    try {
+        const response = await instance.patch(`/user/profile/${userId}`, {secure_url})
+        return response.data
+    } catch (error) {
+        return Promise.reject(error)
+    }
+})
 
 
 const initialState = {
@@ -38,6 +50,19 @@ const userSlice = createSlice({
                 state.loading = false
                 state.error = false
                 state.data = action.payload?.data
+            })
+            .addCase(handleUpdateProfileImage.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(handleUpdateProfileImage.fulfilled, (state, action) => {
+                state.loading = false
+                state.error = false
+                state.data = action.payload?.data
+            })
+            .addCase(handleUpdateProfileImage.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.error.message
             })
     }
 })

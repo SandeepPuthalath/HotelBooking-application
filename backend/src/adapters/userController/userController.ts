@@ -6,6 +6,7 @@ import { getUserProfile } from "../../application/user-cases/user/read";
 import { HttpStatus } from "../../types/httpStatus";
 import {
   changeUserRole,
+  updateProfileImg,
   updateUserProfile,
 } from "../../application/user-cases/user/update";
 
@@ -55,11 +56,28 @@ const userController = (
     }
   );
 
+
+  const handleUpdateProfileImage = asyncHandler(
+    async (req: Request, res: Response) => {
+      const userId: any | null = req.params.userId;
+      const {secure_url} = req.body;
+
+       const data = await updateProfileImg(userId, secure_url , dbRepositoryUser);
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "User profile img has been updated",
+        data,
+      });
+    }
+  );
+
  
   return {
     HandleChangeUserRole,
     handleGetUserProfile,
     handleUpdateUserProfile,
+    handleUpdateProfileImage,
   };
 };
 

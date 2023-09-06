@@ -46,7 +46,6 @@ const BannerDetails = () => {
   const { bannerId } = useParams();
   const loading = useSelector((s) => s.adminBanner?.loading);
   const uploading = useSelector((s) => s.uploadImg.loading);
-  const message = useSelector((s) => s.adminBanner?.message);
   const banner = useSelector((s) => s.adminBanner?.banner);
   const fileInputRef = React.useRef();
   const [edit, setEdit] = React.useState(false);
@@ -66,6 +65,7 @@ const BannerDetails = () => {
         if (response?.errors) {
           return Swal.fire("Error!", response?.errors?.message, "error");
         }
+        setEdit(false)
         return Swal.fire("Success!", response.payload?.message, "success");
       });
     },
@@ -82,10 +82,12 @@ const BannerDetails = () => {
   });
 
   React.useEffect(() => {
-    dispatch(handleFetchingBannerDetails(bannerId));
-    formik.setFieldValue("title", banner?.title);
-    formik.setFieldValue("desc", banner?.desc);
-  }, [dispatch]);
+    dispatch(handleFetchingBannerDetails(bannerId)).then((response) =>{
+       const {banner} = response?.payload
+      formik.setFieldValue("title", banner?.title);
+      formik.setFieldValue("desc", banner?.desc);
+    });
+  }, []);
 
   const handleImgChoose = () => {
     fileInputRef.current.click();

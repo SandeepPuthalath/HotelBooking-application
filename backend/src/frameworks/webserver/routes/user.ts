@@ -14,9 +14,13 @@ const userRouter = () =>{
         userRepositoryMongoDB
     )
 
-    router.get('/profile/:userId', controller.handleGetUserProfile);
+    router;
     router.put('/profile/update/:userId', controller.handleUpdateUserProfile);
     // router.patch('/profile/changeRole/:userId', controller.HandleChangeUserRole);
+    router
+      .route("/profile/:userId")
+      .get(controller.handleGetUserProfile)
+      .patch(controller.handleUpdateProfileImage);
    
 
     return router

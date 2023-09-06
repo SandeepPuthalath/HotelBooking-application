@@ -27,6 +27,11 @@ const userSchema = new Schema(
       type: String,
       trim: true,
     },
+    pic:{
+      type:String,
+      trim:true,
+      default:""
+    },
     role:{
       type: String,
       trim: true,

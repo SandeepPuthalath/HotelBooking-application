@@ -23,11 +23,9 @@ const validationSchema = Yup.object().shape({
 const AdminDestinationPage = () => {
   const dispatch = useDispatch();
   const uploadLoading = useSelector((s) => s.uploadImg.loading);
-  // const uploadData = useSelector((s) => s.uploadImg.data);
-  // const uploadError = useSelector((s) => s.uploadImg.error);
   const [imgUrl, setImgUrl] = React.useState("");
   const [file, setFile] = React.useState(null);
-  
+  const [isAdd, setIsAdd] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(resetImgUploadState());
@@ -56,43 +54,38 @@ const AdminDestinationPage = () => {
     },
   });
 
-  return (
-    <div>
-      <div className="bg-white flex flex-row justify-center items-center shadow-md ">
-        <div className="grid md:grid-cols-3">
-          <div className="md:col-span-1">
-            <div className="flex flex-col gap-2"> 
-              <div className="m-2">
-                <Typography variant="h5">Add destination</Typography>
-              </div>
-              <div>
-                <figure className="relative">
-                  {uploadLoading && <Loading />}
-                  <img
-                    className="h-96 w-full rounded-lg object-cover object-center"
-                    src={imgUrl ? imgUrl : "/defaults/default-image.jpg"}
-                    alt="destinatiom img"
-                  />
-                  {/* <Typography
-                    as="caption"
-                    variant="small"
-                    className="mt-2 text-center font-normal"
-                  >
-                    Image caption
-                  </Typography> */}
+  const handleChange = () => {
+    setIsAdd((s) => !s);
+  };
 
-                  <div className="flex w-full justify-center items-center my-2">
-                    {/* <Button
-                      size="sm"
-                      className="shadow-none rounded-sm bg-gray-900 text-gray-100"
-                      Clis
-                    >
-                      Choose img
-                    </Button> */}
-                  </div>
-                </figure>
-                <div className="flex flex-col gap-3 justify-center items-center hover:shadow-none">
-                  <div className="w-72">
+  return (
+    <div className="px-1 py-1">
+      <div className="flex flex-col bg-white">
+        <div className="flex justify-center items-center py-2">
+          <h3 className="font-bold uppercase text-2xl text-gray-900">
+            Destinations
+          </h3>
+        </div>
+        <div className="grid gap-2">
+          {isAdd ? (
+            <div className="">
+              <div className="grid md:grid-cols-2 ">
+                <div className="md:col-span-1   border-gray-200 flex justify-center items-center">
+                  <figure className="relative px-2 py-2">
+                    {uploadLoading && <Loading />}
+                    <img
+                      loading="lazy"
+                      className="bg-red-500 md:min-h-[15rem] md:max-h-[15rem] shadow-sm shadow-gray-500  rounded-md object-cover object-center"
+                      src={imgUrl ? imgUrl : "/defaults/default-image.jpg"}
+                      alt="destinatiom img"
+                    />
+                  </figure>
+                </div>
+                <div className="md:col-span-1 px-10 py-10 md:px-5 md:py-5">
+                  <div className="flex flex-col gap-5 justify-center items-center">
+                    <div className="w-full text-center text-gray-900 text-md font-semibold uppercase">
+                      Add banner form
+                    </div>
                     <Input
                       {...formik.getFieldProps("name")}
                       error={Boolean(formik.errors.name)}
@@ -102,8 +95,6 @@ const AdminDestinationPage = () => {
                           : "Enter destination name"
                       }
                     />
-                  </div>
-                  <div className="w-72">
                     <Input
                       onChange={handleFileSelect}
                       error={
@@ -116,21 +107,35 @@ const AdminDestinationPage = () => {
                       }
                       type="file"
                     />
-                  </div>
-                  <div className="">
-                    <Button
-                      size="sm"
-                      className="shadow-none bg-gray-900 rounded-sm hover:shadow-none"
-                      onClick={formik.handleSubmit}
-                    >
-                      submit
-                    </Button>
+                    <div className="w-full flex justify-end items-center gap-2">
+                      <button
+                        className="bg-red-50 text-red-700 text-sm font-bold uppercase px-3 py-2 rounded-sm"
+                        onClick={handleChange}
+                      >
+                        cancel
+                      </button>
+                      <button
+                        onClick={formik.handleSubmit}
+                        className="bg-gray-900 text-gray-50 text-sm font-bold uppercase px-3 py-2 rounded-sm"
+                      >
+                        submit
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="md:col-span-2">
+          ) : (
+            <div className="flex justify-end items-center px-5">
+              <button
+                onClick={handleChange}
+                className="px-3 py-2 bg-blue-700 text-xs text-gray-50 font-semibold uppercase rounded-sm my-1 shadow-md"
+              >
+                Add Destination
+              </button>
+            </div>
+          )}
+          <div className="px-2">
             <DestinationTable />
           </div>
         </div>

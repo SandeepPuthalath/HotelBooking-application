@@ -5,11 +5,15 @@ import AdminNavbar from "./AdminNavbar";
 
 const AdminLayout = () => {
   return (
-    <div className="flex bg-gray-100">
-      <AdminSidebar />
-      <div className="flex flex-col w-full h-screen">
-      <AdminNavbar/>
-        <div className="p-4 overflow-auto">{<Outlet />}</div>
+    <div className="grid grid-cols-12  bg-white">
+      <div className="h-screen col-span-2 flex justify-center md:col-span-3">
+        <AdminSidebar />
+      </div>
+      <div className="col-span-10 md:col-span-9">
+        <div className="grid">
+          <AdminNavbar />
+          <div className="p-4 h-[36rem] overflow-auto">{<Outlet />}</div>
+        </div>
       </div>
     </div>
   );

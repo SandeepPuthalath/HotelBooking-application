@@ -7,13 +7,13 @@ import { UserDbInterface} from "../../repositories/userDbRepository";
 
 
 export  function removePasswordField(object: any){
-    let { _id, firstName, lastName, email, phoneNumber, role, GSTNumber, createdAt, updatedAt} = object
+    let { _id, firstName, lastName, email, phoneNumber, role, GSTNumber, createdAt, updatedAt, pic} = object
 
     createdAt = new Date(createdAt).toLocaleString().split(",")[0];
 
     updatedAt = new Date(updatedAt).toLocaleString().split(",")[0]
 
-    return { _id, firstName, lastName, email, phoneNumber, role, GSTNumber, createdAt, updatedAt}
+    return { _id, firstName, lastName, email, phoneNumber, role, GSTNumber, createdAt, updatedAt, pic}
 
 }
 
@@ -26,7 +26,6 @@ export const getUserProfile = async ( id: string, userRepository : ReturnType<Us
     }
     const user  = await userRepository.getUserById(id);
     const data = removePasswordField(user)
-
     if(!user){
         throw new AppError('User Dose not exist', HttpStatus.UNAUTHORIZED)
     }
@@ -39,9 +38,7 @@ export const getAllUsers =async ( userRepository : ReturnType<UserDbInterface>) 
     const users = await userRepository.getAllUsers()
 
     const data =  users.map( user => removePasswordField(user))
-
-    console.log(data)
-
+    
     return data
 }
 

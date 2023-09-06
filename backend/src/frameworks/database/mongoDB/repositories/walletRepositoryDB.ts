@@ -27,7 +27,9 @@ export default function walletRepositoryDB() {
         $push: { transactions: transactionId },
       },
       { new: true }
-    ).populate("transactions");
+    )
+      .populate({ path: "transactions", options: { sort: { createdAt: -1 } } })
+      .exec();
 
   return {
     createWallet,
