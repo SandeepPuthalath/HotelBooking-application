@@ -4,7 +4,7 @@ import { instance } from "../../api/instance";
 
 export const handleAddingMoneyToWallet = createAsyncThunk("addWalletMoney", async ({userId, amount}) =>{
     try {
-        const response = await instance.post(`/wallet/?userId=${userId}`, {amount});
+        const response = await instance.post(`/wallet?userId=${userId}`, {amount});
         return response.data
     } catch (error) {
         return Promise.reject(error)

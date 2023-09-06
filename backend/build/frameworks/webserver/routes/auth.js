@@ -14,6 +14,8 @@ const authRouter = () => {
     const controller = (0, authController_1.default)(authServiceInterface_1.authServiceInterface, authService_1.authService, userDbRepository_1.userDbRepository, userRepositoryMongoDB_1.userRepositoryMongoDB);
     router.post('/signup', controller.registerUser);
     router.post('/login', controller.loginUser);
+    router.post('/send-otp', controller.sendOtp);
+    router.post('/verify-otp', controller.verifyOtp);
     return router;
 };
 exports.default = authRouter;

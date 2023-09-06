@@ -1,7 +1,8 @@
 import axios from "axios";
+import { Constants } from "../../config";
 
 const roomAxios = axios.create({
-  baseURL: "http://localhost:5000/api/room",
+  baseURL: `${Constants.BASE_URL}/room`,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

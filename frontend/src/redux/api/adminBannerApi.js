@@ -1,8 +1,10 @@
 import axios from "axios";
+import { Constants } from "../../config";
 
 
 const adminBannerApi = axios.create({
-    baseURL: 'http://localhost:5000/api/banner',
+    baseURL: `${Constants.BASE_URL}/banner`,
+
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

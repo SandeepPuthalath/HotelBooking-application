@@ -3,9 +3,13 @@
 export const adminLogin = '/login'
 
 
-export const cloudName = "da88acifi";
-export const uploadPreset = "BookIt_uploades";
+export const cloudName = process.env.REACT_APP_CLOUD_NAME;
+export const uploadPreset = process.env.REACT_APP_UPLOAD_PRESET;
 
 export const Configs ={
-    SERVER_URL: "http://localhost:5000"
+    SERVER_URL:process.env.REACT_APP_SERVER_URL
+}
+
+export const Constants = {
+    BASE_URL: process.env.REACT_APP_BASE_URL
 }

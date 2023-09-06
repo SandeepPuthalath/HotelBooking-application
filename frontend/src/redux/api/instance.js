@@ -1,13 +1,14 @@
 import axios from "axios";
+import { Constants } from "../../config";
 
 
 export const instance = axios.create({
-    baseURL: "http://localhost:5000/api"
+    baseURL: Constants.BASE_URL
 })
 
 
 export const adminInstance = axios.create({
-    baseURL: "http://localhost:5000/api"
+    baseURL: Constants.BASE_URL
 })
 
 

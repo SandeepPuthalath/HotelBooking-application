@@ -26,14 +26,21 @@ const userSchema = new mongoose_1.Schema({
         type: String,
         trim: true,
     },
-    // confirmationToken: {
-    //   type: String,
-    //   required: true,
-    // },
-    // confirmed: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+    pic: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+    role: {
+        type: String,
+        trim: true,
+        default: 'normal'
+    },
+    GSTNumber: {
+        type: String,
+        trim: true,
+        default: ""
+    }
 }, { timestamps: true });
 const User = (0, mongoose_1.model)('User', userSchema);
 exports.default = User;

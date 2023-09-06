@@ -3,9 +3,13 @@ import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
+import path from "path";
 
 const expressConfig = (app: Application) => {
   app.use(express.json());
+  const _dirname = path.join("");
+  const buildPath = path.join(_dirname, "../frontend/build")
+  app.use(express.static(buildPath))
   app.use(bodyParser.json({ limit: "10mb" }));
   app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
   app.use(express.urlencoded({ extended: true }));

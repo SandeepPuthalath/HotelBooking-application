@@ -1,7 +1,8 @@
 import axios from "axios";
+import { Constants } from "../../config";
 
 const bookingApi = axios.create({
-    baseURL:"http://localhost:5000/api/booking",
+    baseURL: `${Constants.BASE_URL}/booking`,
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

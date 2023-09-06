@@ -1,7 +1,8 @@
 import axios from "axios";
+import { Constants } from "../../config";
 
 const myHotelApi = axios.create({
-  baseURL: "http://localhost:5000/api/hotel",
+  baseURL: `${Constants.BASE_URL}/hotel`,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

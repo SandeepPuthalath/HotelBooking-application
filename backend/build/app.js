@@ -8,21 +8,30 @@ const connection_1 = __importDefault(require("./frameworks/database/mongoDB/conn
 const http_1 = __importDefault(require("http"));
 const server_1 = __importDefault(require("./frameworks/webserver/server"));
 const express_2 = __importDefault(require("./frameworks/webserver/express"));
-// import routes from './frameworks/webserver/routes';
-// import connection from './frameworks/database/redis/connection';
-// import errorHandlingMidlleware from './frameworks/webserver/middlewares/errorHandlingMiddleware';
-// import AppError from './utils/appError';
+const routes_1 = __importDefault(require("./frameworks/webserver/routes"));
+const appError_1 = __importDefault(require("./utils/appError"));
+const errorHandlingMidlleware_1 = __importDefault(require("./frameworks/webserver/middlewares/errorHandlingMidlleware"));
+const socket_io_1 = require("socket.io");
+const config_1 = __importDefault(require("./config"));
+const socket_1 = __importDefault(require("./frameworks/webSocket/socket"));
+const authService_1 = require("./frameworks/services/authService");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
+const io = new socket_io_1.Server(server, {
+    cors: {
+        origin: config_1.default.CLIENT_URL,
+        methods: ["GET", "POST"]
+    }
+});
+(0, socket_1.default)(io, (0, authService_1.authService)());
 //connecting mongoDb
 (0, connection_1.default)();
 (0, express_2.default)(app);
 // routes for each endpoint
-// routes(app);
-// app.use(errorHandlingMidlleware);
+(0, routes_1.default)(app);
+app.use(errorHandlingMidlleware_1.default);
 // catch 404 and forward to error handler
-// app.all('*', (req, res, next: NextFunction) => {
-//   next(new AppError('Not found', 404));
-// });
+app.all("*", (req, res, next) => {
+    next(new appError_1.default("Not found", 404));
+});
 (0, server_1.default)(server).startServer();
-// export type RedisClient = typeof redisClient;

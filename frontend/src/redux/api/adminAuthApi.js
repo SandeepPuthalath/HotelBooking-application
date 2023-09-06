@@ -1,8 +1,9 @@
 import axios from "axios";
+import { Constants } from "../../config";
 
 
 const adminAuth = axios.create({
-    baseURL:"http://localhost:5000/api/adminAuth",
+    baseURL: `${Constants.BASE_URL}/adminAuth`,
     headers:{
         "Content-Type": "application/json"
     }

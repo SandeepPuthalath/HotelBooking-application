@@ -12,13 +12,43 @@ const userRepositoryMongoDB = () => {
     };
     //add user
     const addUser = async (user) => {
-        const newUser = new userModel_1.default(user);
+        const newUser = new userModel_1.default({
+            firstName: user.getFirstName(),
+            lastName: user.getLastName(),
+            email: user.getEmail(),
+            phoneNumber: user.getPhoneNumber(),
+            password: user.getPassword(),
+        });
         newUser.save();
         return newUser;
+    };
+    // getting user by phone number
+    const getUserByPhoneNumber = async (phoneNumber) => {
+        const user = await userModel_1.default.findOne({
+            phoneNumber,
+        });
+        return user;
+    };
+    const getUserById = async (id) => await userModel_1.default.findById(id);
+    const updateUserByProperty = async (id, updates) => {
+        const user = await userModel_1.default.findByIdAndUpdate(id, updates, { new: true });
+        return user;
+    };
+    const changeProfileImg = async (id, url) => await userModel_1.default.findByIdAndUpdate(id, { $set: { pic: url } }, { upsert: true, new: true });
+    const getAllUsers = async () => await userModel_1.default.find();
+    const changeUserRole = async (id, GSTNumber) => {
+        const data = await userModel_1.default.findByIdAndUpdate(id, { $set: { role: "business", GSTNumber: GSTNumber } }, { new: true });
+        return data;
     };
     return {
         getUserByEmail,
         addUser,
+        getUserByPhoneNumber,
+        getUserById,
+        updateUserByProperty,
+        getAllUsers,
+        changeUserRole,
+        changeProfileImg,
     };
 };
 exports.userRepositoryMongoDB = userRepositoryMongoDB;

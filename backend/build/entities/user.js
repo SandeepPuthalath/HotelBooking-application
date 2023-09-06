@@ -1,12 +1,12 @@
 "use strict";
-// export default function user({
-//     username, password, email, role, createdAt
-// }){
-//     return{
-//     getUsername: () => username,
-//     getPassword: () => password,
-//     getEmail: () => email,
-//     getRole: () => role,
-//     getCreatedAt: () => createdAt
-//     }
-// }
+Object.defineProperty(exports, "__esModule", { value: true });
+function userEntity(firstName, lastName, email, phoneNumber, password) {
+    return {
+        getFirstName: () => firstName,
+        getLastName: () => lastName,
+        getEmail: () => email,
+        getPhoneNumber: () => parseInt(phoneNumber),
+        getPassword: () => password
+    };
+}
+exports.default = userEntity;

@@ -10,15 +10,29 @@ const helmet_1 = __importDefault(require("helmet"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const expressConfig = (app) => {
     app.use(express_1.default.json());
-    app.use(body_parser_1.default.json({ limit: '10mb' }));
-    app.use(body_parser_1.default.urlencoded({ limit: '10mb', extended: true }));
+    // const _dirname = path.join("");
+    // const buildPath = path.join(_dirname, "../frontend/build")
+    // app.use(express.static(buildPath))
+    app.use(body_parser_1.default.json({ limit: "10mb" }));
+    app.use(body_parser_1.default.urlencoded({ limit: "10mb", extended: true }));
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use((0, helmet_1.default)({ xssFilter: true }));
-    app.use((0, morgan_1.default)('dev'));
-    app.use((0, cors_1.default)({
-        origin: 'http://localhost:5173',
-        methods: 'GET POST PUT PATCH DELETE',
-        credentials: true,
-    }));
+    app.use((0, morgan_1.default)("dev"));
+    // Set up CORS headers
+    app.use((req, res, next) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+        next();
+    });
+    const corsOptions = {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
+        exposedHeaders: [
+            'Cross-Origin-Opener-Policy',
+            'Cross-Origin-Resource-Policy',
+            'Access-Control-Allow-Origin'
+        ],
+    };
+    app.use((0, cors_1.default)(corsOptions));
 };
 exports.default = expressConfig;
