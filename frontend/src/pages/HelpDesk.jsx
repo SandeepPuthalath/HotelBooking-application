@@ -73,7 +73,6 @@ const HelpDesk = () => {
   const handleConnectToChat = (id) => {
     socket.emit("join_help_desk", id);
     socket.on("receive_message", (data) => {
-      console.log({ data });
       dispatch(addNewMesssage(data));
     });
     setHotelId(id);
@@ -94,7 +93,6 @@ const HelpDesk = () => {
   };
 
   const handleSendMessage = () => {
-    console.log("sending message");
     if (newMessage) {
       const messageData = {
         hotelId: hotelId,
