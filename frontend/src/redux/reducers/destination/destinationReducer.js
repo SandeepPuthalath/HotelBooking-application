@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Constants } from "../../../config";
 
 
 export const instance = axios.create({
-    baseURL: "http://localhost:5000/api/destination",
+    baseURL: `${Constants.BASE_URL}/destination`,
 })
 
 

@@ -60,5 +60,5 @@
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.63.6"
   },
-  "proxy":"http://localhost:5000"
+  "proxy":"http://sandboxshopping.online"
 }
