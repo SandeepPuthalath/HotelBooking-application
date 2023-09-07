@@ -40,6 +40,8 @@ const userRepositoryMongoDB = () => {
         const data = await userModel_1.default.findByIdAndUpdate(id, { $set: { role: "business", GSTNumber: GSTNumber } }, { new: true });
         return data;
     };
+    const countUsers = async () => await userModel_1.default.countDocuments();
+    const fetchNewUsers = async () => await userModel_1.default.find().sort({ createdAt: -1 }).limit(4);
     return {
         getUserByEmail,
         addUser,
@@ -49,6 +51,8 @@ const userRepositoryMongoDB = () => {
         getAllUsers,
         changeUserRole,
         changeProfileImg,
+        countUsers,
+        fetchNewUsers,
     };
 };
 exports.userRepositoryMongoDB = userRepositoryMongoDB;

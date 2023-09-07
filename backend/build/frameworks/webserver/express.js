@@ -8,11 +8,12 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const path_1 = __importDefault(require("path"));
 const expressConfig = (app) => {
     app.use(express_1.default.json());
-    // const _dirname = path.join("");
-    // const buildPath = path.join(_dirname, "../frontend/build")
-    // app.use(express.static(buildPath))
+    const _dirname = path_1.default.join("");
+    const buildPath = path_1.default.join(_dirname, "../frontend/build");
+    app.use(express_1.default.static(buildPath));
     app.use(body_parser_1.default.json({ limit: "10mb" }));
     app.use(body_parser_1.default.urlencoded({ limit: "10mb", extended: true }));
     app.use(express_1.default.urlencoded({ extended: true }));
@@ -25,7 +26,7 @@ const expressConfig = (app) => {
         next();
     });
     const corsOptions = {
-        origin: 'http://localhost:3000',
+        origin: '*',
         methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
         exposedHeaders: [
             'Cross-Origin-Opener-Policy',

@@ -266,6 +266,18 @@ function bookingRepositoryDb() {
         const finalResult = Array.from(resultMap.values());
         return finalResult;
     };
+    const countBookings = async () => bookingModel_1.default.countDocuments();
+    const adminRevenu = async () => {
+        const overollAmount = await bookingModel_1.default.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: "$price" },
+                },
+            },
+        ]);
+        return Math.round(overollAmount[0]?.total * 0.10);
+    };
     return {
         createBooking,
         getAllBooking,
@@ -281,6 +293,8 @@ function bookingRepositoryDb() {
         changePaymentStatus,
         getBookingDetailsOfUser,
         getWeeklyBookings,
+        countBookings,
+        adminRevenu,
     };
 }
 exports.default = bookingRepositoryDb;

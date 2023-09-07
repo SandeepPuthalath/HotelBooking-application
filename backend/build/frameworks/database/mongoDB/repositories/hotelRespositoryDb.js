@@ -42,6 +42,7 @@ function hotelRepositoryDb() {
         ratings: { $elemMatch: alreadyRated },
     }, { $set: { "ratings.$.star": star } }, { new: true });
     const updateTotalRating = async (totalRating, hotelId) => await hotelModel_1.default.findByIdAndUpdate(hotelId, { $set: { totalRating: totalRating } }, { new: true });
+    const countHotels = async () => await hotelModel_1.default.countDocuments();
     return {
         create,
         update,
@@ -53,6 +54,7 @@ function hotelRepositoryDb() {
         rateHotel,
         updateRating,
         updateTotalRating,
+        countHotels,
     };
 }
 exports.default = hotelRepositoryDb;

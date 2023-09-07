@@ -10,6 +10,8 @@ const userDbRepository = (repository) => {
     const getAllUsers = async () => repository.getAllUsers();
     const changeUserRole = async (id, GSTNumber) => await repository.changeUserRole(id, GSTNumber);
     const changeProfileImg = async (id, url) => await repository.changeProfileImg(id, url);
+    const countUsers = async () => await repository.countUsers();
+    const fetchNewUsers = async () => await repository.fetchNewUsers();
     return {
         getUserByEmail,
         addUser,
@@ -19,6 +21,8 @@ const userDbRepository = (repository) => {
         getAllUsers,
         changeUserRole,
         changeProfileImg,
+        countUsers,
+        fetchNewUsers,
     };
 };
 exports.userDbRepository = userDbRepository;

@@ -15,6 +15,8 @@ function bookingRepository(repository) {
     const changePaymentStatus = async (id, paymentMethod) => await repository.changePaymentStatus(id, paymentMethod);
     const getBookingDetailsOfUser = async (id) => await repository.getBookingDetailsOfUser(id);
     const getWeeklyBookings = async (id) => await repository.getWeeklyBookings(id);
+    const countBookings = async () => await repository.countBookings();
+    const adminRevenu = async () => await repository.adminRevenu();
     return {
         createBooking,
         getAllBooking,
@@ -30,6 +32,8 @@ function bookingRepository(repository) {
         changePaymentStatus,
         getBookingDetailsOfUser,
         getWeeklyBookings,
+        countBookings,
+        adminRevenu,
     };
 }
 exports.default = bookingRepository;
