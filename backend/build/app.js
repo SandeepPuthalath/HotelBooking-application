@@ -12,14 +12,13 @@ const routes_1 = __importDefault(require("./frameworks/webserver/routes"));
 const appError_1 = __importDefault(require("./utils/appError"));
 const errorHandlingMidlleware_1 = __importDefault(require("./frameworks/webserver/middlewares/errorHandlingMidlleware"));
 const socket_io_1 = require("socket.io");
-const config_1 = __importDefault(require("./config"));
 const socket_1 = __importDefault(require("./frameworks/webSocket/socket"));
 const authService_1 = require("./frameworks/services/authService");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
-        origin: config_1.default.CLIENT_URL,
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });

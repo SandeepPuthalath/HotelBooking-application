@@ -25,7 +25,7 @@ const expressConfig = (app: Application) => {
   });
 
   const corsOptions = {
-    origin: configKeys.CLIENT_URL,
+    origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     exposedHeaders: [
       "Cross-Origin-Opener-Policy",

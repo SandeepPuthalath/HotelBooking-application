@@ -3,10 +3,6 @@ import { Constants } from "../../config";
 
 const destinationApi = axios.create({
   baseURL: `${Constants.BASE_URL}/destination`,
-    headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
 })
 
 
