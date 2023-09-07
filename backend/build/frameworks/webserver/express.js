@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const path_1 = __importDefault(require("path"));
+const config_1 = __importDefault(require("../../config"));
 const expressConfig = (app) => {
     app.use(express_1.default.json());
     const _dirname = path_1.default.join("");
@@ -26,12 +27,12 @@ const expressConfig = (app) => {
         next();
     });
     const corsOptions = {
-        origin: '*',
-        methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
+        origin: config_1.default.CLIENT_URL,
+        methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
         exposedHeaders: [
-            'Cross-Origin-Opener-Policy',
-            'Cross-Origin-Resource-Policy',
-            'Access-Control-Allow-Origin'
+            "Cross-Origin-Opener-Policy",
+            "Cross-Origin-Resource-Policy",
+            "Access-Control-Allow-Origin",
         ],
     };
     app.use((0, cors_1.default)(corsOptions));

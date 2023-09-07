@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import path from "path";
+import configKeys from "../../config";
 
 const expressConfig = (app: Application) => {
   app.use(express.json());
@@ -24,12 +25,12 @@ const expressConfig = (app: Application) => {
   });
 
   const corsOptions = {
-    origin: '*',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
+    origin: configKeys.CLIENT_URL,
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     exposedHeaders: [
-      'Cross-Origin-Opener-Policy',
-      'Cross-Origin-Resource-Policy',
-      'Access-Control-Allow-Origin'
+      "Cross-Origin-Opener-Policy",
+      "Cross-Origin-Resource-Policy",
+      "Access-Control-Allow-Origin",
     ],
   };
 
