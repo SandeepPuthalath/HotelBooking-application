@@ -41,6 +41,8 @@ export default function hotelRepository(
     hotelId: string | mongoose.Types.ObjectId
   ) => await repository.updateTotalRating(totalRating, hotelId);
 
+  const countHotels = async () => await repository.countHotels()
+
   return {
     create,
     update,
@@ -52,6 +54,7 @@ export default function hotelRepository(
     rateHotel,
     updateRating,
     updateTotalRating,
+    countHotels,
   };
 }
 

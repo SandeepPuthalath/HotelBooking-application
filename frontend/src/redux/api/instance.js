@@ -8,7 +8,7 @@ export const instance = axios.create({
 
 
 export const adminInstance = axios.create({
-    baseURL: Constants.BASE_URL
+    baseURL: Constants.BASE_URL+"/admin"
 })
 
 
@@ -31,7 +31,6 @@ adminInstance.interceptors.request.use((request) => {
     const state = localStorage.getItem('authTokens');
     const authTokens = JSON.parse(state)
     const token = (authTokens?.access)
-    console.log(token)
     request.headers['Authorization'] = `Bearer ${token}`;
     return request;
 },

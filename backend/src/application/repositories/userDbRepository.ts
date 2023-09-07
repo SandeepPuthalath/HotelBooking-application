@@ -25,6 +25,10 @@ export const userDbRepository = (
 
   const changeProfileImg = async (id:string, url: string) => await repository.changeProfileImg(id, url);
 
+  const countUsers = async () => await repository.countUsers();
+
+   const fetchNewUsers = async () => await repository.fetchNewUsers();
+
   return {
     getUserByEmail,
     addUser,
@@ -34,6 +38,9 @@ export const userDbRepository = (
     getAllUsers,
     changeUserRole,
     changeProfileImg,
+    countUsers,
+    fetchNewUsers,
+
   };
 };
 

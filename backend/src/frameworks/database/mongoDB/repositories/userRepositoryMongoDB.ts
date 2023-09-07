@@ -64,6 +64,10 @@ export const userRepositoryMongoDB = () => {
     return data;
   };
 
+  const countUsers = async () => await User.countDocuments();
+
+  const fetchNewUsers = async () => await User.find().sort({createdAt: -1}).limit(4);
+
   return {
     getUserByEmail,
     addUser,
@@ -73,6 +77,8 @@ export const userRepositoryMongoDB = () => {
     getAllUsers,
     changeUserRole,
     changeProfileImg,
+    countUsers,
+    fetchNewUsers,
   };
 };
 

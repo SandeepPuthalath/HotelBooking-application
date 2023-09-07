@@ -9,12 +9,23 @@ import {
 } from "../../application/user-cases/user/read";
 import { HttpStatus } from "../../types/httpStatus";
 import mongoose from "mongoose";
+import { BookingRepository } from "../../application/repositories/BookingRepository";
+import { BookingRepositoryDbType } from "../../frameworks/database/mongoDB/repositories/BookingRepositoryDb";
+import { hotelRepositoryInterface } from "../../application/repositories/hotelRepository";
+import { hotelRepositoryDbInterface } from "../../frameworks/database/mongoDB/repositories/hotelRespositoryDb";
+import fetchDashboardDetails from "../../application/user-cases/admin/fetchDashboardDetails";
 
 export default function adminController(
   userDbRepository: UserDbInterface,
-  userDbRepositoryImpl: UserRepositoryMongoDB
+  userDbRepositoryImpl: UserRepositoryMongoDB,
+  bookingRepoInt: BookingRepository,
+  bookingRepoImpl: BookingRepositoryDbType,
+  hotelRepoInt: hotelRepositoryInterface,
+  hotelRepoImpl: hotelRepositoryDbInterface
 ) {
   const userRespository = userDbRepository(userDbRepositoryImpl());
+  const bookingRepository = bookingRepoInt(bookingRepoImpl());
+  const hotelRepository = hotelRepoInt(hotelRepoImpl());
 
   const handleGetAllUsers = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
@@ -22,35 +33,43 @@ export default function adminController(
 
       const data = await getAllUsers(userRespository);
 
-      res
-        .status(HttpStatus.OK)
-        .json({
-          status: "success",
-          message: "All users details has been fetched",
-          data: data,
-        });
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "All users details has been fetched",
+        data: data,
+      });
     }
   );
 
   const handleGetUserDetails = expressAsyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-
       const userId: any = req.params?.userId;
 
       const data = await getUserProfile(userId, userRespository);
-      
-      res
-        .status(HttpStatus.OK)
-        .json({
-          status: "success",
-          message: "user details has been fetched",
-          data: data,
-        });
+
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "user details has been fetched",
+        data: data,
+      });
+    }
+  );
+
+  const handleFetchingDashboardDatas = expressAsyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+      const data = await fetchDashboardDetails(
+        userRespository,
+        bookingRepository,
+        hotelRepository
+      );
+
+      res.status(HttpStatus.OK).json(data);
     }
   );
 
   return {
     handleGetAllUsers,
     handleGetUserDetails,
+    handleFetchingDashboardDatas,
   };
 }

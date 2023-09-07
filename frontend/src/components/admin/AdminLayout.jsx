@@ -12,7 +12,7 @@ const AdminLayout = () => {
       <div className="col-span-10 md:col-span-9">
         <div className="grid">
           <AdminNavbar />
-          <div className="p-4 h-[36rem] overflow-auto">{<Outlet />}</div>
+          <div className="p-4 h-[36rem] bg-gray-300 overflow-auto">{<Outlet />}</div>
         </div>
       </div>
     </div>

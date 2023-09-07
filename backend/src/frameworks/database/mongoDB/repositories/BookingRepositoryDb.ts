@@ -318,6 +318,21 @@ export default function bookingRepositoryDb() {
     return finalResult;
   };
 
+  const countBookings = async () => Booking.countDocuments();
+
+  const adminRevenu = async () => {
+    const overollAmount = await Booking.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$price" },
+        },
+      },
+    ]);
+
+    return Math.round(overollAmount[0]?.total * 0.10);
+  }
+
   return {
     createBooking,
     getAllBooking,
@@ -333,6 +348,8 @@ export default function bookingRepositoryDb() {
     changePaymentStatus,
     getBookingDetailsOfUser,
     getWeeklyBookings,
+    countBookings,
+    adminRevenu,
   };
 }
 

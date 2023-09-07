@@ -81,6 +81,8 @@ export default function hotelRepositoryDb() {
       { new: true }
     );
 
+    const countHotels = async () => await Hotel.countDocuments();
+
   return {
     create,
     update,
@@ -92,6 +94,7 @@ export default function hotelRepositoryDb() {
     rateHotel,
     updateRating,
     updateTotalRating,
+    countHotels,
   };
 }
 
