@@ -28,7 +28,6 @@ export default function paymentServices() {
       cancel_url: `${configKeys.CLIENT_URL}/cancel`,
     });
 
-    console.log("this is session",session)
     return session;
   };
 

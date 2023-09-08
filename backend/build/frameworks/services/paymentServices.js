@@ -26,7 +26,6 @@ function paymentServices() {
             success_url: `${config_1.default.CLIENT_URL}/success/${bookingId}`,
             cancel_url: `${config_1.default.CLIENT_URL}/cancel`,
         });
-        console.log("this is session", session);
         return session;
     };
     return {

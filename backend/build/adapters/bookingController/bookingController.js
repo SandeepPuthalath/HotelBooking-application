@@ -37,7 +37,6 @@ function bookingController(bookingRepoInt, bookingRepoDbImp, roomRepoInt, roomRe
         const id = req.query.id;
         console.log(id, paymentMethod);
         const data = await (0, payment_1.default)(id, paymentMethod, payments, bookingRepo, roomRepo);
-        console.log(data);
         res
             .status(httpStatus_1.HttpStatus.OK)
             .json({

@@ -69,8 +69,6 @@ export default function bookingController(
         roomRepo
       );
 
-      console.log(data);
-
       res
         .status(HttpStatus.OK)
         .json({
