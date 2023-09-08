@@ -72,7 +72,7 @@ const BookingCard = (probs) => {
         <div className="flex justify-start items-center gap-2">
           <span className="font-semibold">Booking date:</span>
           <span className="text-md font-semibold uppercase">
-            {createdAt.split("T")[0]}
+            {createdAt?.split("T")[0]}
           </span>
         </div>
         <div className="flex justify-start items-center gap-2">
@@ -102,7 +102,7 @@ const BookingCard = (probs) => {
           <span className="font-semibold">RoomId :</span>
           <div className="flex items-center">
             <span className="uppercase font-semibold">
-              {roomInfo?._id.substring(0, 10)}
+              {roomInfo?._id?.substring(0, 10)}
             </span>
           </div>
         </div>
@@ -134,7 +134,7 @@ const BookingCard = (probs) => {
           <span className="font-semibold">Check in date :</span>
           <div className="flex items-center">
             <span className="capitalize font-semibold">
-              {checkOutDate.split("T")[0]}
+              {checkOutDate?.split("T")[0]}
             </span>
           </div>
         </div>
@@ -142,7 +142,7 @@ const BookingCard = (probs) => {
           <span className="font-semibold">Check out date :</span>
           <div className="flex items-center">
             <span className="capitalize font-semibold">
-              {checkOutDate.split("T")[0]}
+              {checkOutDate?.split("T")[0]}
             </span>
           </div>
         </div>
