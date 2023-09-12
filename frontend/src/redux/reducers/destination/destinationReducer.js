@@ -13,6 +13,7 @@ export const fetchFeaturedDestinations = createAsyncThunk("destination/featured"
     try {
 
         const response = await instance.get(`/featured?count=${payload}`);
+        console.log(response.data)
 
         return response.data;
         

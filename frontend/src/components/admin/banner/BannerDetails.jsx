@@ -83,7 +83,7 @@ const BannerDetails = () => {
 
   React.useEffect(() => {
     dispatch(handleFetchingBannerDetails(bannerId)).then((response) =>{
-       const {banner} = response?.payload
+       const banner = response?.payload?.banner
       formik.setFieldValue("title", banner?.title);
       formik.setFieldValue("desc", banner?.desc);
     });

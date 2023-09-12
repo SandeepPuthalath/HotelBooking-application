@@ -14,8 +14,7 @@ export default async function addDestination(name: string, photo: string, destin
     }
 
     const isExists = await destinationResp.isDestinationNameExists(name);
-
-    console.log(isExists)
+    
 
     if(isExists){
         throw new AppError("The destination already exists", HttpStatus.CONFLICT);

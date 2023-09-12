@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ErrorPage from "../../pages/ErrorPage";
 
 const HelpDesk = React.lazy(() => import("../../pages/HelpDesk"));
 const BookingLayout = React.lazy(() =>
@@ -116,7 +117,7 @@ export default function UserRouter() {
           </Suspense>:
           <Navigate to="/login"/>
         } />
-        <Route path="*" element={<h1>404 page not found</h1>} />
+        <Route path="*" element={<ErrorPage url={"/"}/>} />
       </Routes>
       <Footer />
       <ToastContainer

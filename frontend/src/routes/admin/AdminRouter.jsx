@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import AdminLoginPage from "../../pages/AdminLoginPage";
 import AdminDashboard from "../../pages/AdminDashboard";
 import AdminLayout from "../../components/admin/AdminLayout";
+import ErrorPage from "../../pages/ErrorPage";
 const AddBanner = lazy(() => import("../../components/admin/banner/AddBanner"));
 const BannerList = lazy(() =>
   import("../../components/admin/banner/BannerList")
@@ -132,7 +133,7 @@ const AdminRouter = () => {
               }
             />
           </Route>
-          <Route path="*" element={<h1>404 page not found</h1>} />
+          <Route path="*" element={<ErrorPage url="/admin"/>} />
         </Route>
       </Routes>
     </>

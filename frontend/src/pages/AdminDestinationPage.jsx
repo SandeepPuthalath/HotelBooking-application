@@ -2,7 +2,7 @@ import React from "react";
 import { DestinationTable } from "../components/admin/destinationManagement/DestinationTable";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { Button, Input, Typography } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 import Loading from "../components/auth/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,7 +17,13 @@ import {
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Pleace enter a name"),
-  photo: Yup.string().required("Choose an image"),
+  photo: Yup.mixed()
+    .required("Choose an image")
+    // .test(
+    //   "FILE_TYPE",
+    //   "Invalid file type! please choose jpg",
+    //   (value) => value && ["image/jpeg", "image/png"].includes(value.type)
+    // ),
 });
 
 const AdminDestinationPage = () => {
@@ -35,8 +41,8 @@ const AdminDestinationPage = () => {
     const file = e.target.files[0];
     setFile(file);
     const url = URL.createObjectURL(file);
-    setImgUrl(url);
     formik.setFieldValue("photo", url);
+    setImgUrl(url);
   };
 
   const formik = useFormik({
@@ -47,7 +53,6 @@ const AdminDestinationPage = () => {
     validationSchema,
     onSubmit: async (payload) => {
       dispatch(handleImageUpload(file)).then(async (response) => {
-        console.log(response);
         payload.photo = separatePhotoId(response?.payload?.secure_url);
         dispatch(handleAddDestination(payload));
       });
@@ -56,6 +61,9 @@ const AdminDestinationPage = () => {
 
   const handleChange = () => {
     setIsAdd((s) => !s);
+    formik.resetForm();
+    setFile(null);
+    setImgUrl("");
   };
 
   return (
@@ -70,21 +78,30 @@ const AdminDestinationPage = () => {
           {isAdd ? (
             <div className="">
               <div className="grid md:grid-cols-2 ">
-                <div className="md:col-span-1   border-gray-200 flex justify-center items-center">
+                <div className=" relative md:col-span-1   border-gray-200 flex justify-center items-center">
                   <figure className="relative px-2 py-2">
                     {uploadLoading && <Loading />}
                     <img
                       loading="lazy"
-                      className="bg-red-500 md:min-h-[15rem] md:max-h-[15rem] shadow-sm shadow-gray-500  rounded-md object-cover object-center"
-                      src={imgUrl ? imgUrl : "/defaults/default-image.jpg"}
+                      className="md:min-h-[15rem] w-72 md:max-h-[15rem] shadow-sm shadow-gray-500  rounded-md object-cover object-center"
+                      src={
+                        imgUrl && !formik.errors.photo
+                          ? imgUrl
+                          : "/defaults/default-image.jpg"
+                      }
                       alt="destinatiom img"
                     />
                   </figure>
+                  {formik.errors.photo && (
+                    <span className="absolute top-5 text-red-500">
+                      {formik.errors.photo}
+                    </span>
+                  )}
                 </div>
                 <div className="md:col-span-1 px-10 py-10 md:px-5 md:py-5">
                   <div className="flex flex-col gap-5 justify-center items-center">
                     <div className="w-full text-center text-gray-900 text-md font-semibold uppercase">
-                      Add banner form
+                      Add Destination form
                     </div>
                     <Input
                       {...formik.getFieldProps("name")}

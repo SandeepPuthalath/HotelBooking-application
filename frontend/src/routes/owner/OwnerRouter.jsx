@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
 import { Suspense } from "react";
+import ErrorPage from "../../pages/ErrorPage";
 const Header = React.lazy(() => import("../../components/Navbar/Header"));
 const Footer = React.lazy(() => import("../../components/footer/Footer"));
 const MyHotel = React.lazy(() => import("../../pages/MyHotel"));
@@ -118,7 +119,7 @@ const OwnerRouter = () => {
               }
             />
           </Route>
-          <Route path="*" element={<h1>404 page not found</h1>} />
+          <Route path="*" element={<ErrorPage url={"/"}/>} />
         </Route>
       </Routes>
       <Footer />

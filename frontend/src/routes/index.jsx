@@ -4,6 +4,7 @@ import { lazy } from "react";
 import { Suspense } from "react";
 import { useSelector } from "react-redux";
 import OwnerRouter from "./owner/OwnerRouter";
+import ErrorPage from "../pages/ErrorPage";
 const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
 const AdminRouter = lazy(() => import("./admin/AdminRouter"));
 const SignupPage = lazy(() => import("../pages/auth/SignupPage"))
@@ -53,6 +54,7 @@ export default function MainRouter() {
           </Suspense>
         }
       />
+      <Route path="*" element={<ErrorPage url={"/"}/>}/>
     </Routes>
   );
 }
