@@ -13,6 +13,7 @@ const userAuthSlice = createSlice({
     reducers: {
         logOut: (state) => {
             state.data = null
+            localStorage.removeItem("reduxState")
         },
         resetError: (state) => {
             state.error = null

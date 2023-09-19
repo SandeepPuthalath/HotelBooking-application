@@ -35,21 +35,21 @@ const userSlice = createSlice({
                 state.error = true
             })
             .addCase(getUserProfile.fulfilled, (state, action) => {
-                state.data = action.payload
+                state.data = action.payload?.data
                 state.error = false
                 state.loading = false
             })
             .addCase(updateUserProfile.pending, (state) => {
                 state.loading = true
             })
-            .addCase(updateUserProfile.rejected, (state, action) =>{
-                state.loading = false
-                state.error = true
-            })
             .addCase(updateUserProfile.fulfilled, (state, action) =>{
                 state.loading = false
                 state.error = false
                 state.data = action.payload?.data
+            })
+            .addCase(updateUserProfile.rejected, (state, action) =>{
+                state.loading = false
+                state.error = true
             })
             .addCase(handleUpdateProfileImage.pending, (state) => {
                 state.loading = true

@@ -5,7 +5,7 @@ export const getUserProfile = createAsyncThunk(
     "userDetails",
     async (payload) => {
       const response = await userAxios.get("/profile/" + payload);
-      return response?.data?.data;
+      return response.data;
     }
   );
 
@@ -14,13 +14,12 @@ export const getUserProfile = createAsyncThunk(
 export const updateUserProfile = createAsyncThunk(
   "udpateProfile",
   async (payload) => {
-    const { applicantId, updates } = payload;
-    console.log(applicantId, updates);
+    const { userId, updates } = payload;
     const response = await userAxios.put(
-      "/profile/update/" + applicantId,
+      "/profile/update/" + userId,
       updates
     );
-    return response;
+    return response.data;
   }
 );
 

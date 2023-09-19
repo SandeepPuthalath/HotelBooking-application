@@ -7,22 +7,22 @@ import {
   updateUserProfile,
 } from "../redux/reducers/thunks/userThunks";
 import GSTDialog from "../components/user/GSTDialog";
-import ProfilePageSkeleton from "../components/Shimmers/ProfilePageSkeleton";
+// import ProfilePageSkeleton from "../components/Shimmers/ProfilePageSkeleton";
 import { IoAdd } from "react-icons/io5";
-import {handleImageUpload} from "../redux/reducers/imageUpload/imageUploadSlice"
+import { handleImageUpload } from "../redux/reducers/imageUpload/imageUploadSlice";
 import { handleUpdateProfileImage } from "../redux/reducers/user/userSlice";
 import { Spinner } from "@material-tailwind/react";
+import Loading from "../components/auth/Loading";
 
 const ProfilePage = () => {
-  const state = useSelector((state) => state);
-  const name = state.userProfile?.data?.firstName
-  const userId = state?.user?.data?.applicantId;
-  const uploading = useSelector(s => s.uploadImg.loading);
-  const loading = useSelector(s => s.userProfile?.loading);
+  const dispatch = useDispatch();
+  const userId = useSelector((s) => s.user.data?.applicantId);
+  const profileData = useSelector((s) => s.userProfile.data);
+  const uploading = useSelector((s) => s.uploadImg.loading);
+  const loading = useSelector((s) => s.userProfile?.loading);
   const [avatar, setAvatar] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [profileData, setProfileData] = useState(null);
-  const dispatch = useDispatch();
+  const [edit, setEdit] = React.useState(false);
 
   // Simulating profile data fetch from the backend
   useEffect(() => {
@@ -30,18 +30,9 @@ const ProfilePage = () => {
     const fetchProfileData = async () => {
       try {
         // Simulating API call delay
-        const { payload } = await dispatch(getUserProfile(userId));
-        // Example response from the backend
-        const response = {
-          firstName: payload?.firstName,
-          lastName: payload?.lastName,
-          email: payload?.email,
-          phoneNumber: payload?.phoneNumber,
-          accountType: payload?.role,
-        };
-        console.log(response)
-        setAvatar(payload?.pic)
-        setProfileData(response);
+        dispatch(getUserProfile(userId));
+        setAvatar(profileData?.pic);
+        formik.setValues(profileData);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -53,10 +44,9 @@ const ProfilePage = () => {
   const handleUpload = (event) => {
     // File upload logic
     setAvatar(URL.createObjectURL(event.target.files[0]));
-    dispatch(handleImageUpload(event.target.files[0])).then((response) =>{
-      const {secure_url} = response.payload;
-      dispatch(handleUpdateProfileImage({userId, secure_url}))
-
+    dispatch(handleImageUpload(event.target.files[0])).then((response) => {
+      const { secure_url } = response.payload;
+      dispatch(handleUpdateProfileImage({ userId, secure_url }));
     });
   };
 
@@ -77,7 +67,6 @@ const ProfilePage = () => {
     validationSchema,
     onSubmit: (values) => {
       // Handle form submission
-      console.log(values);
       const updates = {
         firstName: values.firstName,
         lastName: values.lastName,
@@ -88,21 +77,17 @@ const ProfilePage = () => {
     },
   });
 
-  // Load fetched profile data into form fields
-  useEffect(() => {
-    if (profileData) {
-      formik.setValues(profileData);
-    }
-  }, [profileData]);
-
   // Render loading state if profile data is being fetched
-  if (!profileData) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <ProfilePageSkeleton />
-      </div>
-    );
-  }
+  // if (!loading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <ProfilePageSkeleton />
+  //     </div>
+  //   );
+  // }
+
+  //loading spinner
+  if (loading) return <Loading />;
 
   return (
     <div className="max-w-xl mx-auto p-6">
@@ -142,9 +127,7 @@ const ProfilePage = () => {
           </div>
         </div>
         <div className="flex justify-center">
-          <div className="text-gray-600">
-            Account Type: {profileData.accountType}
-          </div>
+          <div className="text-gray-600">Account Type: {profileData?.role}</div>
           <button
             onClick={() => setIsOpen(true)}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 focus:outline-none ml-4"
@@ -161,6 +144,7 @@ const ProfilePage = () => {
               className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
               placeholder="First Name"
               {...formik.getFieldProps("firstName")}
+              disabled={edit}
             />
             {formik.touched.firstName && formik.errors.firstName && (
               <div className="text-red-500 mt-1">{formik.errors.firstName}</div>
@@ -172,6 +156,7 @@ const ProfilePage = () => {
               className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
               placeholder="Last Name"
               {...formik.getFieldProps("lastName")}
+              disabled={edit}
             />
             {formik.touched.lastName && formik.errors.lastName && (
               <div className="text-red-500 mt-1">{formik.errors.lastName}</div>
@@ -183,6 +168,7 @@ const ProfilePage = () => {
               className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
               placeholder="Email"
               {...formik.getFieldProps("email")}
+              disabled={edit}
             />
             {formik.touched.email && formik.errors.email && (
               <div className="text-red-500 mt-1">{formik.errors.email}</div>
@@ -194,6 +180,7 @@ const ProfilePage = () => {
               className="w-full p-2 border rounded focus:outline-none focus:border-blue-500"
               placeholder="Phone Number"
               {...formik.getFieldProps("phoneNumber")}
+              disabled={edit}
             />
             {formik.touched.phoneNumber && formik.errors.phoneNumber && (
               <div className="text-red-500 mt-1">
@@ -212,7 +199,7 @@ const ProfilePage = () => {
       <GSTDialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        name={name}
+        name={profileData?.firstName}
         applicantId={userId}
       />
     </div>
