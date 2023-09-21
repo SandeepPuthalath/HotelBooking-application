@@ -50,9 +50,6 @@ const LoginPage = () => {
           onClose={handleSuccesClose}
         />
       )}
-      <div className="absolute w-full flex justify-end items-center  px-2 py-2 top-0">
-        <button className="font-bold text-blue-600 hover:underline uppercase" onClick={() => navigate("/admin")}>Admin login</button>
-      </div>
     </div>
   );
 };
