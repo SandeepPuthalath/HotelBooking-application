@@ -11,19 +11,19 @@ export default function hotelRouter() {
   router.get("/featured", controller.handleGetFeatureHotels);
   router.get("/:id", controller.handleViewHotel);
   router.post(
-    "/create/:userId",
-    jwtTokenVerification,
-    controller.handleAddHotel
-  );
-  router.put("/update/:id", controller.handleUpdateHotel);
-  router.delete("/delete/:id", controller.handleDeleteHotel);
-  router.get(
-    "/myhotel/:userId",
+      "/create/:userId",
+      jwtTokenVerification,
+      controller.handleAddHotel
+      );
+      router.put("/update/:id", controller.handleUpdateHotel);
+      router.delete("/delete/:id", controller.handleDeleteHotel);
+      router.get(
+          "/myhotel/:userId",
     jwtTokenVerification,
     controller.handleGetMyHotelDetails
-  );
-  router.get("/search/:destination", controller.handleDestinationSearch);
-  router.put("/rating", jwtTokenVerification, controller.handleRating);
-
+    );
+    router.get("/search/:destination", controller.handleDestinationSearch);
+    router.put("/rating", jwtTokenVerification, controller.handleRating);
+    
   return router;
 }

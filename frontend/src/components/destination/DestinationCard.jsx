@@ -1,12 +1,20 @@
 import React from "react";
 import { cloudName } from "../../config";
 import { useNavigate } from "react-router-dom";
+import { setSearchValue } from "../../redux/reducers/destination/destinationReducer";
+import { useDispatch } from "react-redux";
 
 const DestinationCard = ({_id, name, photo}) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const handleHotelSearchDest = () =>{
+    dispatch(setSearchValue(name));
+    navigate('/hotels')
+  }
 
   return ( 
-    <div onClick={() => navigate('/hotels')} className="relative hover:shadow-md hover:shadow-gray-600 cursor-pointer">
+    <div onClick={handleHotelSearchDest} className="relative hover:shadow-md hover:shadow-gray-600 cursor-pointer">
       <img
       loading="lazy"
         className="h-full max-w-full rounded-sm"

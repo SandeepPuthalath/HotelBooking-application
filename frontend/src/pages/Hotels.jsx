@@ -12,6 +12,7 @@ import {
 } from "@material-tailwind/react";
 import { handleDestinationSearch } from "../redux/reducers/hotel/hotelSlice";
 import Loading from "../components/auth/Loading"
+import { removeSearchValue, setSearchValue } from "../redux/reducers/destination/destinationReducer";
 
 const HotelCard = React.lazy(() => import( "../components/hotel/hotelCard"))  
 
@@ -19,19 +20,25 @@ export default function Hotels() {
   const loading = useSelector(s => s.hotels?.loading)
   const hotels = useSelector(s => s.hotels?.data)
   const dispatch = useDispatch();
-  const [destination, setDestination] = useState("");
+  const destination = useSelector((s) => s.destinations.search);
   const destinations = useSelector(s => s.allDestinations?.data)
 
-
   useEffect(() => {
-    dispatch(viewAllHotels());
+    if(destination){
+      dispatch(handleDestinationSearch(destination));
+    } else {
+      dispatch(viewAllHotels());
+    }
+
+    return () => dispatch(removeSearchValue())
   }, []);
 
   const handleSetSearchValue = (e) => {
-    setDestination(e);
+    dispatch(setSearchValue(e));
   };
 
   const handleSearch = () => {
+    console.log(destination)
     dispatch(handleDestinationSearch(destination))
   };
 

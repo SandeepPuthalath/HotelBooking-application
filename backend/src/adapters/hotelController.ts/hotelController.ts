@@ -138,7 +138,6 @@ export default function hotelController(
   const handleGetFeatureHotels =
     async ( req: Request, res: Response, next: NextFunction) => {
       try {
-          console.log("got to featured hotesl api");
           const featured = await fetchFeaturedHotels(repository);
 
           res.status(HttpStatus.OK).json(featured);

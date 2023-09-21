@@ -13,7 +13,6 @@ export const fetchFeaturedDestinations = createAsyncThunk("destination/featured"
     try {
 
         const response = await instance.get(`/featured?count=${payload}`);
-        console.log(response.data)
 
         return response.data;
         
@@ -30,6 +29,7 @@ const initialState = {
     destinations: null,
     destination: null,
     featured:null,
+    search: "",
     error: null,
 }
 
@@ -37,7 +37,15 @@ const initialState = {
 const destinationReducer = createSlice({
     name: "destination",
     initialState,
-    reducers:{},
+    reducers:{
+        setSearchValue:(state, action) =>{
+            state.search = action.payload;
+        },
+        removeSearchValue : (state) =>{
+            state.search = ""
+        }
+
+    },
     extraReducers: (builder) =>{
 
         builder
@@ -56,5 +64,5 @@ const destinationReducer = createSlice({
     }
 })
 
-
+export const {removeSearchValue, setSearchValue} = destinationReducer.actions
 export default destinationReducer.reducer;

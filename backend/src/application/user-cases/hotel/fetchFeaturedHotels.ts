@@ -9,8 +9,6 @@ export default async function fetchFeaturedHotels(
 ){
     const featured = await repository.featuredHotels();
 
-    console.log(featured);
-
     return featured;
 
 }
