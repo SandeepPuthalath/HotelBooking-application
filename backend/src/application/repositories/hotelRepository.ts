@@ -43,6 +43,8 @@ export default function hotelRepository(
 
   const countHotels = async () => await repository.countHotels()
 
+  const featuredHotels = async () => await repository.featuredHotels();
+
   return {
     create,
     update,
@@ -55,6 +57,7 @@ export default function hotelRepository(
     updateRating,
     updateTotalRating,
     countHotels,
+    featuredHotels,
   };
 }
 

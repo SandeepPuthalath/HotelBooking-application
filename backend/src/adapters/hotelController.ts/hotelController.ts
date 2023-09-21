@@ -12,6 +12,7 @@ import mongoose from "mongoose";
 import getUserHotel from "../../application/user-cases/hotel/getUserHotel";
 import viewByDestination from "../../application/user-cases/hotel/viewByDestination";
 import ratingHotel from "../../application/user-cases/hotel/ratingHotel";
+import fetchFeaturedHotels from "../../application/user-cases/hotel/fetchFeaturedHotels";
 
 export default function hotelController(
   hotelRepositoryDb: hotelRepositoryInterface,
@@ -69,6 +70,7 @@ export default function hotelController(
   const handleViewHotel = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
+      console.log(id)
       const data = await viewHotel(new mongoose.Types.ObjectId(id), repository);
 
       res.status(HttpStatus.OK).json({
@@ -125,15 +127,27 @@ export default function hotelController(
     async (req: Request, res: Response, next: NextFunction) => {
       const { star, userId, hotelId } = req.body;
       const result = await ratingHotel(star, userId, hotelId, repository);
-      res
-        .status(HttpStatus.OK)
-        .json({
-          status: "success",
-          message: "Rating added successfully",
-          result: result,
-        });
+      res.status(HttpStatus.OK).json({
+        status: "success",
+        message: "Rating added successfully",
+        result: result,
+      });
     }
   );
+
+  const handleGetFeatureHotels =
+    async ( req: Request, res: Response, next: NextFunction) => {
+      try {
+          console.log("got to featured hotesl api");
+          const featured = await fetchFeaturedHotels(repository);
+
+          res.status(HttpStatus.OK).json(featured);
+      } catch (error) {
+        console.log(error)
+      }
+    
+    };
+    
 
   return {
     handleAddHotel,
@@ -144,5 +158,6 @@ export default function hotelController(
     handleGetMyHotelDetails,
     handleDestinationSearch,
     handleRating,
+    handleGetFeatureHotels,
   };
 }

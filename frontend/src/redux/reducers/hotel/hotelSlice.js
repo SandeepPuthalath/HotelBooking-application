@@ -17,11 +17,20 @@ export const handleDestinationSearch = createAsyncThunk("hotels/search", async (
   }
 })
 
+export const handleFetchingTopHotels = createAsyncThunk("featuredHotels", async () =>{
+  try {
+    const response = await instance.get("/hotel/featured");
+    return response.data;
+  } catch (error) {
+    throw new Error(error)
+  }
+})
 
 
 const initialState = {
   loading: false,
   data: [],
+  featured: [],
   error: null,
 };
 
@@ -52,6 +61,18 @@ const hotelSlice = createSlice({
         state.data = action.payload?.data;
       })
       .addCase(handleDestinationSearch.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(handleFetchingTopHotels.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleFetchingTopHotels.fulfilled, (state, action) => {
+        state.loading = false;
+        state.featured = action.payload;
+      })
+      .addCase(handleFetchingTopHotels.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

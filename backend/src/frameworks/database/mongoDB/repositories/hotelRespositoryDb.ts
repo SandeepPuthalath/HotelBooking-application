@@ -81,7 +81,9 @@ export default function hotelRepositoryDb() {
       { new: true }
     );
 
-    const countHotels = async () => await Hotel.countDocuments();
+  const countHotels = async () => await Hotel.countDocuments();
+
+  const featuredHotels = async () => await Hotel.find({featured:true}).limit(4);
 
   return {
     create,
@@ -95,6 +97,7 @@ export default function hotelRepositoryDb() {
     updateRating,
     updateTotalRating,
     countHotels,
+    featuredHotels,
   };
 }
 

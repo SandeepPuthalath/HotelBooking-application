@@ -14,7 +14,9 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(fetchFeaturedDestinations(4));
+ 
   }, [dispatch]);
+  
 
   if (loading) {
     return <Loading />;
