@@ -14,6 +14,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const getUserHotel_1 = __importDefault(require("../../application/user-cases/hotel/getUserHotel"));
 const viewByDestination_1 = __importDefault(require("../../application/user-cases/hotel/viewByDestination"));
 const ratingHotel_1 = __importDefault(require("../../application/user-cases/hotel/ratingHotel"));
+const fetchFeaturedHotels_1 = __importDefault(require("../../application/user-cases/hotel/fetchFeaturedHotels"));
 function hotelController(hotelRepositoryDb, hotelRepositoryDbImpl) {
     const repository = hotelRepositoryDb(hotelRepositoryDbImpl());
     const handleAddHotel = (0, express_async_handler_1.default)(async (req, res, next) => {
@@ -46,6 +47,7 @@ function hotelController(hotelRepositoryDb, hotelRepositoryDbImpl) {
     });
     const handleViewHotel = (0, express_async_handler_1.default)(async (req, res, next) => {
         const { id } = req.params;
+        console.log(id);
         const data = await (0, view_1.default)(new mongoose_1.default.Types.ObjectId(id), repository);
         res.status(httpStatus_1.HttpStatus.OK).json({
             status: "success",
@@ -82,14 +84,21 @@ function hotelController(hotelRepositoryDb, hotelRepositoryDbImpl) {
     const handleRating = (0, express_async_handler_1.default)(async (req, res, next) => {
         const { star, userId, hotelId } = req.body;
         const result = await (0, ratingHotel_1.default)(star, userId, hotelId, repository);
-        res
-            .status(httpStatus_1.HttpStatus.OK)
-            .json({
+        res.status(httpStatus_1.HttpStatus.OK).json({
             status: "success",
             message: "Rating added successfully",
             result: result,
         });
     });
+    const handleGetFeatureHotels = async (req, res, next) => {
+        try {
+            const featured = await (0, fetchFeaturedHotels_1.default)(repository);
+            res.status(httpStatus_1.HttpStatus.OK).json(featured);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    };
     return {
         handleAddHotel,
         handleUpdateHotel,
@@ -99,6 +108,7 @@ function hotelController(hotelRepositoryDb, hotelRepositoryDbImpl) {
         handleGetMyHotelDetails,
         handleDestinationSearch,
         handleRating,
+        handleGetFeatureHotels,
     };
 }
 exports.default = hotelController;

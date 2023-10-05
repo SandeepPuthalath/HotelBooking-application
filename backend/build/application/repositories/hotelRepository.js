@@ -12,6 +12,7 @@ function hotelRepository(repository) {
     const updateRating = async (star, alreadyRated) => await repository.updateRating(star, alreadyRated);
     const updateTotalRating = async (totalRating, hotelId) => await repository.updateTotalRating(totalRating, hotelId);
     const countHotels = async () => await repository.countHotels();
+    const featuredHotels = async () => await repository.featuredHotels();
     return {
         create,
         update,
@@ -24,6 +25,7 @@ function hotelRepository(repository) {
         updateRating,
         updateTotalRating,
         countHotels,
+        featuredHotels,
     };
 }
 exports.default = hotelRepository;

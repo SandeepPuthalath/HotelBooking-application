@@ -35,8 +35,9 @@ function bookingController(bookingRepoInt, bookingRepoDbImp, roomRepoInt, roomRe
         console.log("in payment section");
         const { paymentMethod } = req.body;
         const id = req.query.id;
-        console.log(id, paymentMethod);
+        // console.log(id, paymentMethod);
         const data = await (0, payment_1.default)(id, paymentMethod, payments, bookingRepo, roomRepo);
+        // res.redirect(data?.url)
         res
             .status(httpStatus_1.HttpStatus.OK)
             .json({

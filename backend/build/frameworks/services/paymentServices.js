@@ -7,7 +7,7 @@ const config_1 = __importDefault(require("../../config"));
 const stripe = require("stripe")(config_1.default.STRIPE_PRIVET_KEY);
 function paymentServices() {
     const generateStripePaymentUrl = async (bookingId, roomName, totalAmount) => {
-        console.log("got to payment service....", bookingId, roomName, totalAmount);
+        // console.log("got to payment service....",bookingId, roomName, totalAmount)
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",

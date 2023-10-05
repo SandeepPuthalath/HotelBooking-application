@@ -7,7 +7,7 @@ const appError_1 = __importDefault(require("../../../utils/appError"));
 const httpStatus_1 = require("../../../types/httpStatus");
 async function payment(bookingId, paymentMethod, paymentServices, bookingResp, roomRepo) {
     const bookingDetails = await bookingResp.changePaymentStatus(bookingId, paymentMethod);
-    console.log("booking details afte update...", bookingDetails);
+    // console.log("booking details afte update...", bookingDetails);
     if (!bookingDetails) {
         throw new appError_1.default("There is no such booking", httpStatus_1.HttpStatus.NOT_FOUND);
     }
