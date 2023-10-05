@@ -16,7 +16,7 @@ export default async function payment(
     bookingId,
     paymentMethod
   );
-  console.log("booking details afte update...", bookingDetails);
+  // console.log("booking details afte update...", bookingDetails);
   if (!bookingDetails) {
     throw new AppError("There is no such booking", HttpStatus.NOT_FOUND);
   }

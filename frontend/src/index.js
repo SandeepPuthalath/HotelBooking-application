@@ -6,6 +6,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import { Provider } from 'react-redux';
 import store from './redux/app/store';
 import ErrorBoundary from './util/ErrorBundary';
+import ErrorPage from './pages/ErrorPage';
 
 
 
@@ -14,7 +15,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ThemeProvider>
-        <ErrorBoundary fallback={<h1>Somthing went wrong</h1>}>
+        <ErrorBoundary fallback={<ErrorPage/>}>
           <App />
         </ErrorBoundary>
       </ThemeProvider>

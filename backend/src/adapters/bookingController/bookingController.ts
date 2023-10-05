@@ -60,7 +60,7 @@ export default function bookingController(
 
       const { paymentMethod } = req.body;
       const id: any = req.query.id;
-      console.log(id, paymentMethod);
+      // console.log(id, paymentMethod);
       const data = await payment(
         id,
         paymentMethod,
@@ -69,6 +69,7 @@ export default function bookingController(
         roomRepo
       );
 
+      // res.redirect(data?.url)
       res
         .status(HttpStatus.OK)
         .json({

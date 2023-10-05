@@ -8,7 +8,7 @@ export default function paymentServices() {
     roomName: string,
     totalAmount: number
   ) => {
-    console.log("got to payment service....",bookingId, roomName, totalAmount)
+    // console.log("got to payment service....",bookingId, roomName, totalAmount)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
