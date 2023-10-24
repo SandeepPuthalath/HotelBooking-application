@@ -14,6 +14,7 @@ const configKeys = {
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD as string,
   STRIPE_PRIVET_KEY: process.env.STRIPE_PRIVET_KEY as string,
   CLIENT_URL: process.env.CLIENT_URL as string,
+  ENVIORNMENT: process.env.ENVIORNMENT as string,
 };
 
 export default configKeys;

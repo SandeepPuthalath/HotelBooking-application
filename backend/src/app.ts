@@ -7,19 +7,20 @@ import routes from "./frameworks/webserver/routes";
 import AppError from "./utils/appError";
 import errorHandlingMidlleware from "./frameworks/webserver/middlewares/errorHandlingMidlleware";
 import { Server } from "socket.io";
-import configKeys from './config';
+import configKeys from "./config";
 import socketConfig from "./frameworks/webSocket/socket";
 import { authService } from "./frameworks/services/authService";
+import path from "path";
 
 const app: Application = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
-  cors:{
-    origin:"*",
-    methods:["GET", "POST"]
-  }
-})
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
 
 socketConfig(io, authService());
 
@@ -30,6 +31,15 @@ expressConfig(app);
 
 // routes for each endpoint
 routes(app);
+
+const staticPath = path.join(__dirname, "..", "..", "frontend", "build");
+app.use(express.static(staticPath));
+
+if (configKeys.ENVIORNMENT === "production") {
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(staticPath, "index.html"));
+  });
+}
 
 app.use(errorHandlingMidlleware);
 
