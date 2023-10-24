@@ -12,15 +12,17 @@ const routes_1 = __importDefault(require("./frameworks/webserver/routes"));
 const appError_1 = __importDefault(require("./utils/appError"));
 const errorHandlingMidlleware_1 = __importDefault(require("./frameworks/webserver/middlewares/errorHandlingMidlleware"));
 const socket_io_1 = require("socket.io");
+const config_1 = __importDefault(require("./config"));
 const socket_1 = __importDefault(require("./frameworks/webSocket/socket"));
 const authService_1 = require("./frameworks/services/authService");
+const path_1 = __importDefault(require("path"));
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: "*",
-        methods: ["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+    },
 });
 (0, socket_1.default)(io, (0, authService_1.authService)());
 //connecting mongoDb
@@ -28,6 +30,13 @@ const io = new socket_io_1.Server(server, {
 (0, express_2.default)(app);
 // routes for each endpoint
 (0, routes_1.default)(app);
+const staticPath = path_1.default.join(__dirname, "..", "..", "frontend", "build");
+app.use(express_1.default.static(staticPath));
+if (config_1.default.ENVIORNMENT === "production") {
+    app.get("*", (req, res) => {
+        res.sendFile(path_1.default.join(staticPath, "index.html"));
+    });
+}
 app.use(errorHandlingMidlleware_1.default);
 // catch 404 and forward to error handler
 app.all("*", (req, res, next) => {
